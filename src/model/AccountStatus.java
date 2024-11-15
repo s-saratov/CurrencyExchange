@@ -6,8 +6,8 @@ package model;
  */
 public enum AccountStatus {
 
-    ACTIVE,
-    BLOCKED,
-    DELETED
+    ACTIVE,     // доступный пользовательский счёт
+    BLOCKED,    // заблокированный пользовательский счёт
+    SYSTEM      // счёт фирмы
 
 }

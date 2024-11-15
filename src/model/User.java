@@ -1,6 +1,8 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,23 +10,15 @@ import java.util.Map;
  * @date 15.11.24
  */
 public class User {
-    // Идентификационный номер пользователя
-    private final int userId;
 
-    // Имя пользователя
-    private String name;
+    // Поля
 
-    // Адрес электронной почты
-    private String email;
-
-    // Пароль
-    private String password;
-
-    // Роль пользователя
-    private UserRole role;
-
-    // Счета пользователя
-    private Map<String, Account> userAccounts;
+    private final int userId;                   // идентификационный номер
+    private String name;                        // имя
+    private String email;                       // адрес электронной почты
+    private String password;                    // пароль
+    private UserRole role;                      // роль
+    private List<Account> userAccounts;         // список счетов
 
     // Базовый конструктор
     public User(int userId, String name, String email, String password) {
@@ -44,7 +38,7 @@ public class User {
         /* Если роль не была задана при создании пользователя - по умолчанию "USER" */
         this.role = role != null ? role : UserRole.USER;
         // Инициализация списка счетов у пользователя
-        this.userAccounts = new HashMap<>();
+        this.userAccounts = new ArrayList<>();
     }
 
     // Геттеры и сеттеры
@@ -69,7 +63,7 @@ public class User {
         return role;
     }
 
-    public Map<String, Account> getUserAccounts() {
+    public List<Account> getUserAccounts() {
         return userAccounts;
     }
 
@@ -87,5 +81,30 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    // Методы
+
+    // Добавляет счёт в список пользователя, возвращает статус операции
+    public boolean addAccountToUserAccounts(Account account) {
+        return userAccounts.add(account);
+    }
+
+    // Удаляет счёт из списка пользователя, возвращает статус операции
+    public boolean removeAccountFromUserAccounts (Account account) {
+        return userAccounts.remove(account);
+    }
+
+    // Возвращает строковое представление экземпляра класса (toString)
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", userAccounts=" + userAccounts +
+                '}';
     }
 }

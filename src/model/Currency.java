@@ -6,8 +6,8 @@ package model;
  */
 public enum Currency {
 
-    EUR,  // валюта по умолчанию
-    USD,
-    PLN
+    EUR,    // евро, валюта по умолчанию
+    USD,    // доллар США
+    PLN     // польский злотый
 
 }

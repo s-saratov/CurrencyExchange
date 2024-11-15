@@ -9,22 +9,25 @@ import java.util.Map;
  * @date 15.11.24
  */
 public class CurrencyRate {
-    // Карта курсов валют
-    private Map<Currency, Double> currencyRates;
-    private LocalDateTime lastUpdated;          // Время последнего обновления курсов
+
+    // Поля
+
+    private Map<Currency, Double> currencyRates;    // карта курсов валют
+    private LocalDateTime lastUpdated;              // дата и время последнего обновления курсов
 
     // Конструктор, который принимает одну валюту и её курс
-    public CurrencyRate(Currency currency, Double rate) {
+
+    public CurrencyRate(Currency currency, Double rate, LocalDateTime lastUpdated) {
         this.currencyRates = new HashMap<>();
         this.currencyRates.put(currency, rate);
-        this.lastUpdated = LocalDateTime.now();
+        this.lastUpdated = lastUpdated;
     }
 
     // Геттеры
+
     public Map<Currency, Double> getCurrencyRates() {
         return currencyRates;
     }
-
     public Double getRate(Currency currency) {
         return currencyRates.get(currency);
     }
@@ -34,6 +37,7 @@ public class CurrencyRate {
 
 
     // Сеттеры
+
     public void setCurrencyRates(Map<Currency, Double> currencyRates) {
         this.currencyRates = currencyRates;
         this.lastUpdated = LocalDateTime.now(); // Обновляем время
@@ -44,19 +48,20 @@ public class CurrencyRate {
         this.lastUpdated = LocalDateTime.now(); // Обновляем время
     }
 
-    // Метод для добавления нового курса валюты
+    // Методы
+
+    // Добавляет новый курс валюты
     public void addCurrencyRate(Currency currency, Double rate) {
         this.currencyRates.put(currency, rate);
         this.lastUpdated = LocalDateTime.now(); // Обновляем время
     }
 
-    // Метод для отображения всех курсов
+    // Отображает все курсы валют
     public void showRates() {
         System.out.println("Current currency rates (Last updated: " + lastUpdated + "):");
         currencyRates.forEach((currency, rate) ->
                 System.out.println(currency + ": " + rate)
         );
     }
-
 
 }

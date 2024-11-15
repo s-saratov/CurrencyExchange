@@ -11,6 +11,8 @@ import java.util.Objects;
  */
 public class Account {
 
+    // Поля
+
     // Идентификационный номер счета пользователя
     private final int accountId;
 
@@ -37,7 +39,7 @@ public class Account {
         this.currency = currency;
     }
 
-    // Конструктор с параметром статуса счета
+    // Конструктор с параметром статуса счёта
     public Account(LocalDate creationDate, int accountId, User owner, Currency currency, BigDecimal balance, AccountStatus status) {
         this.accountId = accountId;
         // Устанавливается текущая дата
@@ -45,11 +47,51 @@ public class Account {
         this.owner = owner;
         this.currency = currency;
         this.balance = balance;
-        /* Если статус не была задан при создании пользователя - по умолчанию "ACTIVE" */
+        /* Если статус не был задан при создании пользователя - по умолчанию "ACTIVE" */
         this.status = status != null ? status : AccountStatus.ACTIVE;
     }
 
-    // Метод toString
+    // Геттеры и сеттеры
+
+    public User getOwner() {
+        return owner;
+    }
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+    public void setStatus(AccountStatus status) {
+        this.status = status;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    // Методы
+
+    // Возвращает строковое представление экземпляра класса
     @Override
     public String toString() {
         return "Account {" +
@@ -62,39 +104,7 @@ public class Account {
                 '}';
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public AccountStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(AccountStatus status) {
-        this.status = status;
-    }
-
-    // Метод equals
+    // Проверяет равенство двух счетов, возвращает статус
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;                  // Сравнение с самим собой
@@ -108,7 +118,7 @@ public class Account {
                 status == account.status;
     }
 
-    // Метод hashCode
+    // Возвращает хэш-код
     @Override
     public int hashCode() {
         return Objects.hash(accountId, owner, currency, balance, creationDate, status);
