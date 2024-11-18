@@ -9,7 +9,7 @@ public interface CustCurrencyRepository {
     boolean addCurrency(String currencyCode, String currencyName);
 
     //READ
-    Currency findCurrencyByCode(String currencyCode);
+    Currency getCurrencyByCode(String currencyCode);
 
     //UPDATE
     boolean  updateCurrency(String currencyCode, String currencyName);

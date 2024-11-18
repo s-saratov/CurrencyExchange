@@ -32,7 +32,7 @@ public class CustCurrencyRepositoryImpl implements CustCurrencyRepository {
     }
 
     @Override
-    public Currency findCurrencyByCode(String currencyCode) {
+    public Currency getCurrencyByCode(String currencyCode) {
         return null;
     }
 
