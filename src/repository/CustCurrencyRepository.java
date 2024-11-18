@@ -1,7 +1,8 @@
 package repository;
 
+import model.CustCurrency;
+
 import java.math.BigDecimal;
-import java.util.Currency;
 
 public interface CustCurrencyRepository {
 
@@ -9,7 +10,7 @@ public interface CustCurrencyRepository {
     boolean addCurrency(String currencyCode, String currencyName);
 
     //READ
-    Currency getCurrencyByCode(String currencyCode);
+    CustCurrency getCurrencyByCode(String currencyCode);
 
     //UPDATE
     boolean  updateCurrency(String currencyCode, String currencyName);

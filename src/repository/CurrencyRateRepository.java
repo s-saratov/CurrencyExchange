@@ -17,7 +17,7 @@ public interface CurrencyRateRepository {
      */
 
     //DELETE
-    boolean deleteCeurrencyRate(String currencyCode);
+    boolean deleteCurrencyRate(String currencyCode);
 
 
 

@@ -20,9 +20,9 @@ public class CurrencyRateRepositoryImpl implements CurrencyRateRepository {
         CustCurrency pln = currencyRepository.getCurrencyByCode("PLN");
 
         this.currencyRateList = new ArrayList<>(List.of(
-               new CurrencyRate(eur, eur, 1.0),
-               new CurrencyRate(eur, usd, 1.0552),
-               new CurrencyRate(eur, pln, 4.32)
+                new CurrencyRate(eur, eur, 1.0),
+                new CurrencyRate(eur, usd, 1.0552),
+                new CurrencyRate(eur, pln, 4.32)
         ));
 
     }
@@ -43,7 +43,7 @@ public class CurrencyRateRepositoryImpl implements CurrencyRateRepository {
     }
 
     @Override
-    public boolean deleteCeurrencyRate(String currencyCode) {
+    public boolean deleteCurrencyRate(String currencyCode) {
         return false;
     }
 }

@@ -1,36 +1,42 @@
 package model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+
+//Класс CurrencyRate представляет собой объект для хранения информации о курсе валют.
+// Он включает базовую валюту, целевую валюту, курс и временную метку
 
 public class CurrencyRate {
 
-    private Currency baseCurrency;
-    private Currency targetCurrency;
-    private double currencyRate;
-    private LocalDateTime timestamp;
+    private final CustCurrency baseCurrency;
+    private final CustCurrency targetCurrency;
+    private final BigDecimal currencyRate;
+    private final LocalDateTime timestamp;
 
-    //constructor
-    public CurrencyRate(Currency baseCurrency, Currency targetCurrency, double currencyRate) {
+    public CurrencyRate(CustCurrency baseCurrency, CustCurrency targetCurrency, double currencyRate) {
+        if (baseCurrency == null || targetCurrency == null) {
+            throw new IllegalArgumentException("Currencies cannot be null.");
+        }
+        if ((currencyRate <= 0)) {
+            throw new IllegalArgumentException("Currency rate must be greater than 0.");
+        }
+
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
-        this.currencyRate = currencyRate;
+        this.currencyRate = BigDecimal.valueOf(currencyRate);
         this.timestamp = LocalDateTime.now();
     }
 
-    //getters
-    public Currency getBaseCurrency() {
+    public CustCurrency getBaseCurrency() {
         return baseCurrency;
     }
 
-    public Currency getTargetCurrency() {
+    public CustCurrency getTargetCurrency() {
         return targetCurrency;
     }
 
-    public double getCurrencyRate() {
+    public BigDecimal getCurrencyRate() {
         return currencyRate;
     }
 
@@ -38,22 +44,8 @@ public class CurrencyRate {
         return timestamp;
     }
 
-    //setters
-    public void setBaseCurrency(Currency baseCurrency) {
-        this.baseCurrency = baseCurrency;
-    }
-
-    public void setTargetCurrency(Currency targetCurrency) {
-        this.targetCurrency = targetCurrency;
-    }
-
-    public void setCurrencyRate(double currencyRate) {
-        this.currencyRate = currencyRate;
-    }
 
     //methods
-
-
     @Override
     public String toString() {
         return "CurrencyRate{" +
@@ -65,41 +57,21 @@ public class CurrencyRate {
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CurrencyRate that)) return false;
 
-        return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(baseCurrency, that.baseCurrency) && Objects.equals(targetCurrency, that.targetCurrency) && Objects.equals(timestamp, that.timestamp);
+        return currencyRate.compareTo(that.currencyRate) == 0 &&
+                Objects.equals(baseCurrency, that.baseCurrency) &&
+                Objects.equals(targetCurrency, that.targetCurrency);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hashCode(baseCurrency);
         result = 31 * result + Objects.hashCode(targetCurrency);
-        result = 31 * result + Double.hashCode(currencyRate);
+        result = 31 * result + currencyRate.hashCode(); // Использование BigDecimal.hashCode
         result = 31 * result + Objects.hashCode(timestamp);
         return result;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CurrencyRate that = (CurrencyRate) o;
-        return Objects.equals(currencyRates, that.currencyRates) && Objects.equals(lastUpdated, that.lastUpdated);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(currencyRates, lastUpdated);
-    }
-
-    @Override
-    public String toString() {
-        return "CurrencyRate{" +
-                "currencyRates=" + currencyRates +
-                ", lastUpdated=" + lastUpdated +
-                '}';
-    }
-
 }

@@ -1,7 +1,7 @@
 package repository;
 
 import model.Account;
-import model.Currency1111;
+import model.CustCurrency;
 import model.User;
 
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     // Добавляет счёт в общий список
     @Override
-    public void addAccount(User owner, Currency1111 currency, BigDecimal initialBalance) {
+    public void addAccount(User owner, BigDecimal initialBalance) {
 
     }
 
@@ -53,7 +53,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     // Возвращает список счетов по валюте
     @Override
-    public List<Account> getAccountsByCurrency(Currency1111 currency) {
+    public List<Account> getAccountsByCurrency(CustCurrency currency) {
         return List.of();
     }
 

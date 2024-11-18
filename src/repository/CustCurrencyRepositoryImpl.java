@@ -4,7 +4,6 @@ import model.CustCurrency;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 public class CustCurrencyRepositoryImpl implements CustCurrencyRepository {
@@ -32,7 +31,7 @@ public class CustCurrencyRepositoryImpl implements CustCurrencyRepository {
     }
 
     @Override
-    public Currency getCurrencyByCode(String currencyCode) {
+    public CustCurrency getCurrencyByCode(String currencyCode) {
         return null;
     }
 
