@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author olgakharina
@@ -64,4 +65,24 @@ public class CurrencyRate {
         );
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CurrencyRate that = (CurrencyRate) o;
+        return Objects.equals(currencyRates, that.currencyRates) && Objects.equals(lastUpdated, that.lastUpdated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currencyRates, lastUpdated);
+    }
+
+    @Override
+    public String toString() {
+        return "CurrencyRate{" +
+                "currencyRates=" + currencyRates +
+                ", lastUpdated=" + lastUpdated +
+                '}';
+    }
 }
