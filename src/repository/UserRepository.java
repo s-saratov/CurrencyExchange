@@ -4,8 +4,11 @@ import model.User;
 
 public interface UserRepository {
 
-    //CREATE
-    //--------------------User—-----------------------------------------------
+import model.Account;
 
+import java.util.Objects;
 
+public interface UserRepository {
+
+    
 }

@@ -3,7 +3,6 @@ package model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
-import java.util.Objects;
 
 /**
  * @author olgakharina
@@ -14,7 +13,7 @@ public class Account {
     // Поля
 
     // Идентификационный номер счета пользователя
-    private final int accountId;
+    private final int accountID;
 
     // Дата создания счета
     private final LocalDate creationDate;
@@ -32,16 +31,16 @@ public class Account {
     private AccountStatus status;
 
     // Стандартный конструктор
-    public Account(int accountId, LocalDate creationDate, User owner, Currency currency) {
-        this.accountId = accountId;
+    public Account(int accountID, LocalDate creationDate, User owner, Currency currency) {
+        this.accountID = accountID;
         this.creationDate = creationDate;
         this.owner = owner;
         this.currency = currency;
     }
 
     // Конструктор с параметром статуса счёта
-    public Account(LocalDate creationDate, int accountId, User owner, Currency currency, BigDecimal balance, AccountStatus status) {
-        this.accountId = accountId;
+    public Account(LocalDate creationDate, int accountID, User owner, Currency currency, BigDecimal balance, AccountStatus status) {
+        this.accountID = accountID;
         // Устанавливается текущая дата
         this.creationDate = LocalDate.now();
         this.owner = owner;
@@ -81,8 +80,8 @@ public class Account {
         this.status = status;
     }
 
-    public int getAccountId() {
-        return accountId;
+    public int getAccountID() {
+        return accountID;
     }
 
     public LocalDate getCreationDate() {
@@ -95,6 +94,7 @@ public class Account {
     @Override
     public String toString() {
         return "Account {" +
+
                 "id=" + accountId +
                 ", owner=" + owner.getName() + // Предполагается, что в User есть метод getCurrencyName()
                 ", currency=" + currency +
@@ -104,23 +104,4 @@ public class Account {
                 '}';
     }
 
-    // Проверяет равенство двух счетов, возвращает статус
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;                  // Сравнение с самим собой
-        if (obj == null || getClass() != obj.getClass()) return false; // Проверка на null и класс
-        Account account = (Account) obj;
-        return accountId == account.accountId &&
-                Objects.equals(owner, account.owner) &&
-                currency == account.currency &&
-                Objects.equals(balance, account.balance) &&
-                Objects.equals(creationDate, account.creationDate) &&
-                status == account.status;
-    }
-
-    // Возвращает хэш-код
-    @Override
-    public int hashCode() {
-        return Objects.hash(accountId, owner, currency, balance, creationDate, status);
-    }
 }

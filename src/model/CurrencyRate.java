@@ -2,6 +2,8 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class CurrencyRate {
@@ -78,4 +80,26 @@ public class CurrencyRate {
         result = 31 * result + Objects.hashCode(timestamp);
         return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CurrencyRate that = (CurrencyRate) o;
+        return Objects.equals(currencyRates, that.currencyRates) && Objects.equals(lastUpdated, that.lastUpdated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currencyRates, lastUpdated);
+    }
+
+    @Override
+    public String toString() {
+        return "CurrencyRate{" +
+                "currencyRates=" + currencyRates +
+                ", lastUpdated=" + lastUpdated +
+                '}';
+    }
+
 }
