@@ -94,8 +94,9 @@ public class Account {
     @Override
     public String toString() {
         return "Account {" +
-                "id=" + accountID +
-                ", owner=" + owner.getName() + // Предполагается, что в User есть метод getName()
+
+                "id=" + accountId +
+                ", owner=" + owner.getName() + // Предполагается, что в User есть метод getCurrencyName()
                 ", currency=" + currency +
                 ", balance=" + balance +
                 ", creationDate=" + creationDate +
