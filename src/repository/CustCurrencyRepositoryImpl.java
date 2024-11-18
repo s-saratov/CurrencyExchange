@@ -1,21 +1,28 @@
 package repository;
 
+import model.CustCurrency;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 
-public class CurrencyRepositoryImpl implements CurrencyRepository {
+public class CustCurrencyRepositoryImpl implements CustCurrencyRepository {
 
-    private List<Currency> currencyList;
+   private List<CustCurrency> currencyList;
 
     //constructor
-    public CurrencyRepositoryImpl() {
-        this.currencyList = new ArrayList<>(List.of(
-                new Currency("EUR", "Euro"),
-                new Currency("USD", "Dollar USA"),
-                new Currency("PLN", "Polish zloty")
-        ));
+    public CustCurrencyRepositoryImpl() {
+
+        CustCurrency eur = new CustCurrency("EUR", "Euro");
+        CustCurrency usd = new CustCurrency("USD", "Dollar USA");
+        CustCurrency pln = new CustCurrency("PLN", "Polish zloty");
+
+        this.currencyList = new ArrayList<>(List.of(eur, usd, pln));
+    }
+
+    public List<CustCurrency> getCurrencyList() {
+        return currencyList;
     }
 
     //methods

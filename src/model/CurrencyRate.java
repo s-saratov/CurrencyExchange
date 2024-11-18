@@ -1,14 +1,15 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.Objects;
 
 public class CurrencyRate {
 
-    Currency baseCurrency;
-    Currency targetCurrency;
-    double currencyRate;
-    LocalDateTime timestamp;
+    private Currency baseCurrency;
+    private Currency targetCurrency;
+    private double currencyRate;
+    private LocalDateTime timestamp;
 
     //constructor
     public CurrencyRate(Currency baseCurrency, Currency targetCurrency, double currencyRate) {
@@ -49,13 +50,15 @@ public class CurrencyRate {
     }
 
     //methods
+
+
     @Override
     public String toString() {
-        return "\nCurrencyRate{" +
-                "baseCurrency: " + baseCurrency +
-                ", targetCurrency: " + targetCurrency +
-                ", currencyRate: " + currencyRate +
-                ", timestamp: " + timestamp +
+        return "CurrencyRate{" +
+                "baseCurrency=" + baseCurrency +
+                ", targetCurrency=" + targetCurrency +
+                ", currencyRate=" + currencyRate +
+                ", timestamp=" + timestamp +
                 '}';
     }
 

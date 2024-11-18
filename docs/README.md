@@ -30,7 +30,7 @@ Develop a console application to simulate the operation of a currency exchange o
    - Actively use the `Map` collection to organize and manage data, such as user accounts, accounts, exchange rates, and other suitable scenarios.
    - For example:
       - Storing a list of user accounts, where the key is the user ID and the value is a list of their accounts.
-      - Storing exchange rates, where the key is the currency code and the value is the current rate.
+      - Storing exchange rates, where the key is the currency сurrencyСode and the value is the current rate.
 
 **Optional:**
 - In case of validation failure, the application should throw an exception, which should then be properly handled. This may include informing the user of the reason for the error and offering a retry.

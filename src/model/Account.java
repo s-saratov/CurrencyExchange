@@ -96,7 +96,7 @@ public class Account {
     public String toString() {
         return "Account {" +
                 "id=" + accountId +
-                ", owner=" + owner.getName() + // Предполагается, что в User есть метод getName()
+                ", owner=" + owner.getName() + // Предполагается, что в User есть метод getCurrencyName()
                 ", currency=" + currency +
                 ", balance=" + balance +
                 ", creationDate=" + creationDate +

@@ -3,7 +3,7 @@ package repository;
 import java.math.BigDecimal;
 import java.util.Currency;
 
-public interface CurrencyRepository {
+public interface CustCurrencyRepository {
 
     //CREATE
     boolean addCurrency(String currencyCode, String currencyName);
