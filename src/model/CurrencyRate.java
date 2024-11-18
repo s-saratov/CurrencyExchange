@@ -1,67 +1,78 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
-/**
- * @author olgakharina
- * @date 15.11.24
- */
 public class CurrencyRate {
 
-    // Поля
+    Currency baseCurrency;
+    Currency targetCurrency;
+    double currencyRate;
+    LocalDateTime timestamp;
 
-    private Map<Currency, Double> currencyRates;    // карта курсов валют
-    private LocalDateTime lastUpdated;              // дата и время последнего обновления курсов
-
-    // Конструктор, который принимает одну валюту и её курс
-
-    public CurrencyRate(Currency currency, Double rate, LocalDateTime lastUpdated) {
-        this.currencyRates = new HashMap<>();
-        this.currencyRates.put(currency, rate);
-        this.lastUpdated = lastUpdated;
+    //constructor
+    public CurrencyRate(Currency baseCurrency, Currency targetCurrency, double currencyRate) {
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
+        this.currencyRate = currencyRate;
+        this.timestamp = LocalDateTime.now();
     }
 
-    // Геттеры
-
-    public Map<Currency, Double> getCurrencyRates() {
-        return currencyRates;
-    }
-    public Double getRate(Currency currency) {
-        return currencyRates.get(currency);
-    }
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+    //getters
+    public Currency getBaseCurrency() {
+        return baseCurrency;
     }
 
-
-    // Сеттеры
-
-    public void setCurrencyRates(Map<Currency, Double> currencyRates) {
-        this.currencyRates = currencyRates;
-        this.lastUpdated = LocalDateTime.now(); // Обновляем время
+    public Currency getTargetCurrency() {
+        return targetCurrency;
     }
 
-    public void setRate(Currency currency, Double rate) {
-        this.currencyRates.put(currency, rate);
-        this.lastUpdated = LocalDateTime.now(); // Обновляем время
+    public double getCurrencyRate() {
+        return currencyRate;
     }
 
-    // Методы
-
-    // Добавляет новый курс валюты
-    public void addCurrencyRate(Currency currency, Double rate) {
-        this.currencyRates.put(currency, rate);
-        this.lastUpdated = LocalDateTime.now(); // Обновляем время
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    // Отображает все курсы валют
-    public void showRates() {
-        System.out.println("Current currency rates (Last updated: " + lastUpdated + "):");
-        currencyRates.forEach((currency, rate) ->
-                System.out.println(currency + ": " + rate)
-        );
+    //setters
+    public void setBaseCurrency(Currency baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
+    public void setTargetCurrency(Currency targetCurrency) {
+        this.targetCurrency = targetCurrency;
+    }
+
+    public void setCurrencyRate(double currencyRate) {
+        this.currencyRate = currencyRate;
+    }
+
+    //methods
+    @Override
+    public String toString() {
+        return "\nCurrencyRate{" +
+                "baseCurrency: " + baseCurrency +
+                ", targetCurrency: " + targetCurrency +
+                ", currencyRate: " + currencyRate +
+                ", timestamp: " + timestamp +
+                '}';
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CurrencyRate that)) return false;
+
+        return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(baseCurrency, that.baseCurrency) && Objects.equals(targetCurrency, that.targetCurrency) && Objects.equals(timestamp, that.timestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(baseCurrency);
+        result = 31 * result + Objects.hashCode(targetCurrency);
+        result = 31 * result + Double.hashCode(currencyRate);
+        result = 31 * result + Objects.hashCode(timestamp);
+        return result;
+    }
 }

@@ -1,7 +1,7 @@
 package repository;
 
 import model.Account;
-import model.Currency;
+import model.Currency1111;
 import model.User;
 
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ public interface AccountRepository {
     // CREATE
 
     // Добавляет счёт в общий список
-    void addAccount(User owner, Currency currency, BigDecimal initialBalance);
+    void addAccount(User owner, Currency1111 currency, BigDecimal initialBalance);
 
     // READ
 
@@ -26,7 +26,7 @@ public interface AccountRepository {
     List<Account> getAccountsByOwner(int ownerID);
 
     // Возвращает список счетов по валюте
-    List<Account> getAccountsByCurrency(Currency currency);
+    List<Account> getAccountsByCurrency(Currency1111 currency);
 
     // DELETE
 

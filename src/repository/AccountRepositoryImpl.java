@@ -1,7 +1,7 @@
 package repository;
 
 import model.Account;
-import model.Currency;
+import model.Currency1111;
 import model.User;
 
 import java.math.BigDecimal;
@@ -17,7 +17,6 @@ public class AccountRepositoryImpl implements AccountRepository{
     AtomicInteger currentID;            // объект, отвечающий за генерацию уникальных ID
 
     // Конструктор
-
     public AccountRepositoryImpl(Map<Integer, Account> accounts, AtomicInteger currentID) {
         this.accounts = new HashMap<>();
     }
@@ -28,7 +27,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     // Добавляет счёт в общий список
     @Override
-    public void addAccount(User owner, Currency currency, BigDecimal initialBalance) {
+    public void addAccount(User owner, Currency1111 currency, BigDecimal initialBalance) {
 
     }
 
@@ -54,7 +53,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     // Возвращает список счетов по валюте
     @Override
-    public List<Account> getAccountsByCurrency(Currency currency) {
+    public List<Account> getAccountsByCurrency(Currency1111 currency) {
         return List.of();
     }
 
