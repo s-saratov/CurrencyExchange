@@ -93,7 +93,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public BigDecimal convertToBaseCurrency(String fromCurrencyCode, BigDecimal amount) {
 
         //получили курс валюты
-        BigDecimal exchangeRate = currencyRateRepository.getCurrencyRates(fromCurrencyCode);
+        BigDecimal exchangeRate = currencyRateRepository.getCurrencyRate(fromCurrencyCode);
 
         /*
         // Проверяем, что курс валюты корректен и не равен нулю
@@ -129,8 +129,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         String toCurrencyCode = toAccount.getCurrency().getCurrencyCode();
 
         //вытаскиваем из репозитория курсов валют - курсы необходимых нам валют
-        BigDecimal fromCurrencyRate = currencyRateRepository.getCurrencyRates(fromCurrencyCode);
-        BigDecimal toCurrencyRate = currencyRateRepository.getCurrencyRates(toCurrencyCode);
+        BigDecimal fromCurrencyRate = currencyRateRepository.getCurrencyRate(fromCurrencyCode);
+        BigDecimal toCurrencyRate = currencyRateRepository.getCurrencyRate(toCurrencyCode);
 
         //проверяем не нулевые ли мы получили курсы
         if (fromCurrencyRate == null || toCurrencyRate == null || fromCurrencyRate.equals(BigDecimal.ZERO) || toCurrencyRate.equals(BigDecimal.ZERO)) {
