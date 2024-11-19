@@ -4,20 +4,20 @@ import java.time.LocalDateTime;
 
 public class CustCurrency {
 
-    private String сurrencyСode;
+    private String currencyCode;
     private String currencyName;
     private LocalDateTime timestamp;
 
     //constructor
     public CustCurrency(String code, String currencyName) {
-        this.сurrencyСode = code;
+        this.currencyCode = code;
         this.currencyName = currencyName;
         this.timestamp = LocalDateTime.now();
     }
 
     //getters
-    public String getСurrencyСode() {
-        return сurrencyСode;
+    public String getCurrencyCode() {
+        return currencyCode;
     }
 
     public String getCurrencyName() {
@@ -29,8 +29,8 @@ public class CustCurrency {
     }
 
     //setters
-    public void setСurrencyСode(String сurrencyСode) {
-        this.сurrencyСode = сurrencyСode;
+    public void setCurrencyСode(String currencyCode) {
+        this.currencyCode = currencyCode;
     }
 
     public void setCurrencyName(String currencyName) {

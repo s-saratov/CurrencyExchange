@@ -8,26 +8,20 @@ import java.util.Objects;
 
 public class CurrencyRate {
 
-    private Currency baseCurrency;
-    private Currency targetCurrency;
+    private Currency currency;
     private double currencyRate;
     private LocalDateTime timestamp;
 
     //constructor
-    public CurrencyRate(Currency baseCurrency, Currency targetCurrency, double currencyRate) {
-        this.baseCurrency = baseCurrency;
-        this.targetCurrency = targetCurrency;
+    public CurrencyRate(Currency currency, double currencyRate, LocalDateTime timestamp) {
+        this.currency = currency;
         this.currencyRate = currencyRate;
         this.timestamp = LocalDateTime.now();
     }
 
     //getters
-    public Currency getBaseCurrency() {
-        return baseCurrency;
-    }
-
-    public Currency getTargetCurrency() {
-        return targetCurrency;
+    public Currency getCurrency() {
+        return currency;
     }
 
     public double getCurrencyRate() {
@@ -39,28 +33,21 @@ public class CurrencyRate {
     }
 
     //setters
-    public void setBaseCurrency(Currency baseCurrency) {
-        this.baseCurrency = baseCurrency;
-    }
-
-    public void setTargetCurrency(Currency targetCurrency) {
-        this.targetCurrency = targetCurrency;
-    }
-
     public void setCurrencyRate(double currencyRate) {
         this.currencyRate = currencyRate;
     }
 
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
     //methods
-
-
     @Override
     public String toString() {
-        return "CurrencyRate{" +
-                "baseCurrency=" + baseCurrency +
-                ", targetCurrency=" + targetCurrency +
-                ", currencyRate=" + currencyRate +
-                ", timestamp=" + timestamp +
+        return "\nCurrencyRate{" +
+                "currency: " + currency +
+                ", currencyRate: " + currencyRate +
+                ", timestamp :" + timestamp +
                 '}';
     }
 
@@ -69,37 +56,19 @@ public class CurrencyRate {
         if (this == o) return true;
         if (!(o instanceof CurrencyRate that)) return false;
 
-        return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(baseCurrency, that.baseCurrency) && Objects.equals(targetCurrency, that.targetCurrency) && Objects.equals(timestamp, that.timestamp);
+        return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(currency, that.currency) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(baseCurrency);
-        result = 31 * result + Objects.hashCode(targetCurrency);
+        int result = Objects.hashCode(currency);
         result = 31 * result + Double.hashCode(currencyRate);
         result = 31 * result + Objects.hashCode(timestamp);
         return result;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CurrencyRate that = (CurrencyRate) o;
-        return Objects.equals(currencyRates, that.currencyRates) && Objects.equals(lastUpdated, that.lastUpdated);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(currencyRates, lastUpdated);
-    }
-
-    @Override
-    public String toString() {
-        return "CurrencyRate{" +
-                "currencyRates=" + currencyRates +
-                ", lastUpdated=" + lastUpdated +
-                '}';
-    }
 
 }
+
+
+
