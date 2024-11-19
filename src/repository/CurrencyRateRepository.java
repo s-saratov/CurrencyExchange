@@ -7,7 +7,6 @@ import java.util.Currency;
 import java.util.Map;
 
 public interface CurrencyRateRepository {
-
     //--------------------------CREATE-----------------------------
     /**
      * Устанавливает курс валюты.

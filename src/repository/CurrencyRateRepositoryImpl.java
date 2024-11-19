@@ -14,7 +14,6 @@ public class CurrencyRateRepositoryImpl implements CurrencyRateRepository {
     // Хранилище курсов валют: ключ - код валюты, значение - курс обмена
     private  Map<String, BigDecimal> currencyRates;
 
-
     public CurrencyRateRepositoryImpl() {
         this.currencyRates = new HashMap<>();
 

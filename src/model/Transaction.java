@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 public class Transaction {
 
     private static final AtomicInteger idCounter = new AtomicInteger(0);
@@ -15,21 +16,39 @@ public class Transaction {
     private int targetAccountID;
     private TransactionType transactionType;
     private BigDecimal amount;
-    private final double feeRate = 1.5;
     private LocalDateTime timestamp;
 
     private CurrencyRate currencyRate;
 
-   //constructors
-     public Transaction(int sourceAccountID, int targetAccountID, TransactionType transactionType, BigDecimal amount) {
+    //constructors
+
+    //для зачисления и списания
+    public Transaction(int accountID, TransactionType transactionType, BigDecimal amount) {
+
+        this.transactionID = idCounter.incrementAndGet();
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.timestamp = LocalDateTime.now();
+
+        // Разветвление по типу транзакции
+        if (transactionType == TransactionType.DEPOSIT) {
+            this.targetAccountID = accountID;
+        } else if (transactionType==TransactionType.WITHDRAW){
+            this.sourceAccountID = accountID;
+        } else {
+            System.out.println("Unsupported transaction type: " + transactionType);
+        }
+
+    }
+
+    //для обменных операций
+    public Transaction(int sourceAccountID, int targetAccountID, BigDecimal amount) {
+
         this.transactionID = idCounter.incrementAndGet();
         this.sourceAccountID = sourceAccountID;
         this.targetAccountID = targetAccountID;
-        this.transactionType = transactionType;
+        this.transactionType = transactionType.TRANSFER;
         this.amount = amount;
-
-        this.currencyRate = currencyRate;//???
-
         this.timestamp = LocalDateTime.now();
     }
 
@@ -54,14 +73,9 @@ public class Transaction {
         return amount;
     }
 
-    public double getFeeRate() {
-        return feeRate;
-    }
-
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
-
 
     public CurrencyRate getCurrencyRate() {
         return currencyRate;
@@ -94,7 +108,6 @@ public class Transaction {
                 ", targetAccountID:" + targetAccountID +
                 ", transactionType: " + transactionType +
                 ", amount: " + amount +
-                ", feeRate: " + feeRate +
                 ", currencyRate: " + currencyRate +
                 ", timestamp: " + timestamp +
                 '}';
@@ -103,9 +116,10 @@ public class Transaction {
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Transaction that)) return false;
+        if (!(o instanceof Transaction)) return false;
 
-        return transactionID == that.transactionID && sourceAccountID == that.sourceAccountID && targetAccountID == that.targetAccountID && Double.compare(feeRate, that.feeRate) == 0 && transactionType == that.transactionType && Objects.equals(amount, that.amount) && Objects.equals(timestamp, that.timestamp) && Objects.equals(currencyRate, that.currencyRate);
+        Transaction that = (Transaction) o;
+        return transactionID == that.transactionID && sourceAccountID == that.sourceAccountID && targetAccountID == that.targetAccountID && transactionType == that.transactionType && Objects.equals(amount, that.amount) && Objects.equals(timestamp, that.timestamp) && Objects.equals(currencyRate, that.currencyRate);
     }
 
     @Override
@@ -115,7 +129,6 @@ public class Transaction {
         result = 31 * result + targetAccountID;
         result = 31 * result + Objects.hashCode(transactionType);
         result = 31 * result + Objects.hashCode(amount);
-        result = 31 * result + Double.hashCode(feeRate);
         result = 31 * result + Objects.hashCode(timestamp);
         result = 31 * result + Objects.hashCode(currencyRate);
         return result;

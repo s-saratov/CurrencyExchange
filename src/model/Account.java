@@ -2,7 +2,7 @@ package model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Currency;
+import model.CustCurrency;
 
 /**
  * @author olgakharina
@@ -22,7 +22,7 @@ public class Account {
     private User owner;
 
     // Валюта счета
-    private Currency currency;
+    private CustCurrency currency;
 
     // Баланс счета
     private BigDecimal balance;
@@ -31,7 +31,7 @@ public class Account {
     private AccountStatus status;
 
     // Стандартный конструктор
-    public Account(int accountID, LocalDate creationDate, User owner, Currency currency) {
+    public Account(int accountID, LocalDate creationDate, User owner, CustCurrency currency) {
         this.accountID = accountID;
         this.creationDate = creationDate;
         this.owner = owner;
@@ -39,7 +39,7 @@ public class Account {
     }
 
     // Конструктор с параметром статуса счёта
-    public Account(LocalDate creationDate, int accountID, User owner, Currency currency, BigDecimal balance, AccountStatus status) {
+    public Account(LocalDate creationDate, int accountID, User owner, CustCurrency currency, BigDecimal balance, AccountStatus status) {
         this.accountID = accountID;
         // Устанавливается текущая дата
         this.creationDate = LocalDate.now();
@@ -59,10 +59,10 @@ public class Account {
         this.owner = owner;
     }
 
-    public Currency getCurrency() {
+    public CustCurrency getCurrency() {
         return currency;
     }
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CustCurrency currency) {
         this.currency = currency;
     }
 
