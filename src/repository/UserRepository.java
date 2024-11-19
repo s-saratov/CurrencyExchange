@@ -1,4 +1,8 @@
 package repository;
+/*
+import model.User;
+
+public interface UserRepository {
 
 import model.Account;
 import model.User;
@@ -9,8 +13,6 @@ import java.util.Objects;
 import java.util.Map;
 import model.User;
 import model.UserRole;
-
-
 
     public interface UserRepository {
 
@@ -33,9 +35,6 @@ import model.UserRole;
     }
 
 
-
-
-
 //    // Проверяет равенство двух счетов, возвращает статус
 //    @Override
 //    public boolean equals(Object obj) {
@@ -56,3 +55,5 @@ import model.UserRole;
 //        return Objects.hash(accountId, owner, currency, balance, creationDate, status);
 //    }
 //}
+
+

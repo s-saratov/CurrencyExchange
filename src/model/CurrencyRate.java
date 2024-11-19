@@ -1,88 +1,73 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author olgakharina
- * @date 15.11.24
- */
 public class CurrencyRate {
 
-    // Поля
+    private Currency currency;
+    private double currencyRate;
+    private LocalDateTime timestamp;
 
-    private Map<Currency, Double> currencyRates;    // карта курсов валют
-    private LocalDateTime lastUpdated;              // дата и время последнего обновления курсов
-
-    // Конструктор, который принимает одну валюту и её курс
-
-    public CurrencyRate(Currency currency, Double rate, LocalDateTime lastUpdated) {
-        this.currencyRates = new HashMap<>();
-        this.currencyRates.put(currency, rate);
-        this.lastUpdated = lastUpdated;
+    //constructor
+    public CurrencyRate(Currency currency, double currencyRate, LocalDateTime timestamp) {
+        this.currency = currency;
+        this.currencyRate = currencyRate;
+        this.timestamp = LocalDateTime.now();
     }
 
-    // Геттеры
-
-    public Map<Currency, Double> getCurrencyRates() {
-        return currencyRates;
-    }
-    public Double getRate(Currency currency) {
-        return currencyRates.get(currency);
-    }
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+    //getters
+    public Currency getCurrency() {
+        return currency;
     }
 
-
-    // Сеттеры
-
-    public void setCurrencyRates(Map<Currency, Double> currencyRates) {
-        this.currencyRates = currencyRates;
-        this.lastUpdated = LocalDateTime.now(); // Обновляем время
+    public double getCurrencyRate() {
+        return currencyRate;
     }
 
-    public void setRate(Currency currency, Double rate) {
-        this.currencyRates.put(currency, rate);
-        this.lastUpdated = LocalDateTime.now(); // Обновляем время
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    // Методы
-
-    // Добавляет новый курс валюты
-    public void addCurrencyRate(Currency currency, Double rate) {
-        this.currencyRates.put(currency, rate);
-        this.lastUpdated = LocalDateTime.now(); // Обновляем время
+    //setters
+    public void setCurrencyRate(double currencyRate) {
+        this.currencyRate = currencyRate;
     }
 
-    // Отображает все курсы валют
-    public void showRates() {
-        System.out.println("Current currency rates (Last updated: " + lastUpdated + "):");
-        currencyRates.forEach((currency, rate) ->
-                System.out.println(currency + ": " + rate)
-        );
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    //methods
+    @Override
+    public String toString() {
+        return "\nCurrencyRate{" +
+                "currency: " + currency +
+                ", currencyRate: " + currencyRate +
+                ", timestamp :" + timestamp +
+                '}';
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof CurrencyRate)) return false;
+
         CurrencyRate that = (CurrencyRate) o;
-        return Objects.equals(currencyRates, that.currencyRates) && Objects.equals(lastUpdated, that.lastUpdated);
+        return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(currency, that.currency) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(currencyRates, lastUpdated);
-    }
-
-    @Override
-    public String toString() {
-        return "CurrencyRate{" +
-                "currencyRates=" + currencyRates +
-                ", lastUpdated=" + lastUpdated +
-                '}';
+        int result = Objects.hashCode(currency);
+        result = 31 * result + Double.hashCode(currencyRate);
+        result = 31 * result + Objects.hashCode(timestamp);
+        return result;
     }
 }
+
+
+
