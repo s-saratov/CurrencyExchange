@@ -1,5 +1,5 @@
 package repository;
-
+/*
 import model.CurrencyRate;
 import model.CustCurrency;
 
@@ -52,3 +52,4 @@ public class CurrencyRateRepositoryImpl implements CurrencyRateRepository {
         return false;
     }
 }
+*/

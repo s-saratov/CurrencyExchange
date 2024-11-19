@@ -29,7 +29,7 @@ public class CustCurrency {
     }
 
     //setters
-    public void setCurrencyСode(String currencyCode) {
+    public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
