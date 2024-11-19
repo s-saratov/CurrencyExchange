@@ -10,7 +10,7 @@ public interface CurrencyRateRepository {
     boolean setExchangeRate(String currencyCode, BigDecimal rate);
 
     //READ
-    Map<Currency, BigDecimal> getCurrencyRates(String currencyCode);
+    BigDecimal getCurrencyRates(String currencyCode);
 
     /*  посмотреть курсы валют на определенную дату - ПОТОМ
         посмотреть историю изменения курса определенной валюты - ПОТОМ
