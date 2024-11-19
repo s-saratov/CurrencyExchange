@@ -30,16 +30,10 @@ public class CustCurrencyRepositoryImpl implements CustCurrencyRepository {
 
     @Override
     public boolean addCurrency(String currencyCode, String currencyName) {
-        if (currencyCode == null || currencyName == null) {
-            throw new IllegalArgumentException("Currency code and name cannot be null.");
-        }
-        if (currencyCode.length() != 3) {
-            throw new IllegalArgumentException("Currency code must be exactly 3 characters.");
-        }
         if (currencyMap.containsKey(currencyCode.toUpperCase())) {
-            return false; // Валюта уже существует
+            return false; // валюта уже существует
         }
-        CustCurrency newCurrency = new CustCurrency(currencyCode.toUpperCase(), currencyName);
+        CustCurrency newCurrency = new CustCurrency(currencyCode, currencyName);
         currencyMap.put(currencyCode.toUpperCase(), newCurrency);
         return true;
     }
