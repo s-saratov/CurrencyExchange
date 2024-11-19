@@ -54,8 +54,9 @@ public class CurrencyRate {
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CurrencyRate that)) return false;
+        if (!(o instanceof CurrencyRate)) return false;
 
+        CurrencyRate that = (CurrencyRate) o;
         return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(currency, that.currency) && Objects.equals(timestamp, that.timestamp);
     }
 
@@ -66,8 +67,6 @@ public class CurrencyRate {
         result = 31 * result + Objects.hashCode(timestamp);
         return result;
     }
-
-
 }
 
 
