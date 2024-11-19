@@ -2,6 +2,8 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class CurrencyRate {
