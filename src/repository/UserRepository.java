@@ -11,16 +11,16 @@ public interface UserRepository {
 
     User registerUser(String name, String email, String password, UserRole role);
 
-    boolean logoutUser(int userId);
-    boolean loginUser(int userId, String password);
+    boolean logoutUser(int userID);
+    boolean loginUser(int userID, String password);
 
 
 
     //добавление аккаунта пользователю
-    void addAccountToUserAccounts(int userId, int accountId);
+    void addAccountToUserAccounts(int userID, int accountId);
 
     //добавление нового пользователя
-    User addUser(int userId, String name, String email, String password);
+    User addUser(int userID, String name, String email, String password);
 
     //Получение списка пользователей по имени
     List<User> getUserByName(String name);
@@ -35,13 +35,13 @@ public interface UserRepository {
     User getUserByEmail(String email);
 
     //Получение пользователя по ID
-    User getUserByID(int userId);
+    User getUserByID(int userID);
 
     //Удаление пользователя
-    boolean deleteUser(int userId);
+    boolean deleteUser(int userID);
 
     //Удаление аккаунта у пользователя
-    void removeAccountFromUserAccounts(int userId, int accountId);
+    void removeAccountFromUserAccounts(int userID, int accountId);
 }
 
 

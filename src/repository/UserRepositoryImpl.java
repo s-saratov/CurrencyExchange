@@ -19,11 +19,11 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         //генерируем уникальный ID
-        int userId = currentID.getAndIncrement();
+        int userID = currentID.getAndIncrement();
         //создаем нового пользователя
-        User newUser = new User(userId, name, email, password, role);
+        User newUser = new User(userID, name, email, password, role);
         //добавляем пользователя в карту
-        users.put(userId, newUser);
+        users.put(userID, newUser);
         writeTransactionLog("Зарегистрирован новый пользователь: " + newUser);
 
         //возвращаем зарегистрированного пользователя
@@ -34,11 +34,11 @@ public class UserRepositoryImpl implements UserRepository {
     private final Map<Integer, Boolean> userSessions = new HashMap<>();
 
     //логин пользователя
-    public boolean loginUser(int userId, String password) {
-        User user = users.get(userId);
+    public boolean loginUser(int userID, String password) {
+        User user = users.get(userID);
         if (user != null && user.getPassword().equals(password)) {
-            userSessions.put(userId, true); // Авторизуем пользователя
-            writeTransactionLog("Пользователь с ID " + userId + " вошел в систему.");
+            userSessions.put(userID, true); // Авторизуем пользователя
+            writeTransactionLog("Пользователь с ID " + userID + " вошел в систему.");
             return true;
         }
         System.err.println("Неверный ID пользователя или пароль.");
