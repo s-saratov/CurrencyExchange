@@ -1,5 +1,8 @@
 package repository.tests;
-
+/**
+ * @author olgakharina
+ * @date 18.11.24
+ */
 import model.CustCurrency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

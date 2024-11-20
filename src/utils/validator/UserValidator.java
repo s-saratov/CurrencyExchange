@@ -15,47 +15,47 @@ public class UserValidator {
      * @param username Имя пользователя.
      * @throws UsernameValidateException Если имя пользователя не соответствует требованиям.
      */
-    public static void isUsernameValid(String username) throws utils.UsernameValidateException {
+    public static void isUsernameValid(String username) throws utils.validator.UsernameValidateException {
         if (username == null || username.isEmpty()) {
-            throw new utils.UsernameValidateException("Имя пользователя не может быть пустым.");
+            throw new utils.validator.UsernameValidateException("Имя пользователя не может быть пустым.");
         }
 
         // Проверяем длину имени пользователя
         if (username.length() < 3 || username.length() > 20) {
-            throw new utils.UsernameValidateException("Имя пользователя должно содержать от 3 до 20 символов.");
+            throw new utils.validator.UsernameValidateException("Имя пользователя должно содержать от 3 до 20 символов.");
         }
 
         // Проверяем, что имя пользователя содержит только допустимые символы
         for (char ch : username.toCharArray()) {
             if (!(Character.isAlphabetic(ch) || Character.isDigit(ch) || ch == '_' || ch == '-')) {
-                throw new utils.UsernameValidateException("Имя пользователя может содержать только буквы, цифры, символы '_' или '-'.");
+                throw new utils.validator.UsernameValidateException("Имя пользователя может содержать только буквы, цифры, символы '_' или '-'.");
             }
         }
 
         // Проверяем, что имя пользователя начинается с буквы
         if (!Character.isAlphabetic(username.charAt(0))) {
-            throw new utils.UsernameValidateException("Имя пользователя должно начинаться с буквы.");
+            throw new utils.validator.UsernameValidateException("Имя пользователя должно начинаться с буквы.");
         }
 
         // Проверка успешна
     }
 
-    public static void isEmailValid(String email) throws utils.EmailValidateException {
+    public static void isEmailValid(String email) throws utils.validator.EmailValidateException {
 
         // 1. Должна присутствовать @
         int indexAt = email.indexOf('@');
         // int lastAt = email.lastIndexOf('@');
-        if (indexAt == -1 || indexAt != email.lastIndexOf('@')) throw new utils.EmailValidateException("@ error");
+        if (indexAt == -1 || indexAt != email.lastIndexOf('@')) throw new utils.validator.EmailValidateException("@ error");
 
         // 2. Точка после собаки
         int dotIndexAfterAt = email.indexOf('.', indexAt + 1);
-        if (dotIndexAfterAt == -1) throw new utils.EmailValidateException(". after @ error");
+        if (dotIndexAfterAt == -1) throw new utils.validator.EmailValidateException(". after @ error");
 
 
         // 3. После последней точки есть 2 или более символов
         // test@fazx.com.ne.t
         int lastDotIndex = email.lastIndexOf('.');
-        if (lastDotIndex + 2 >= email.length()) throw new utils.EmailValidateException("last . error");
+        if (lastDotIndex + 2 >= email.length()) throw new utils.validator.EmailValidateException("last . error");
 
         // 4.  Алфавит, цифры, '-', '_', '.', '@'
         /*
@@ -74,7 +74,7 @@ public class UserValidator {
                     ch == '@');
 
             // Если любой символ НЕ подходящий, сразу возвращаем false
-            if (!isPass) throw new utils.EmailValidateException("illegal symbol");
+            if (!isPass) throw new utils.validator.EmailValidateException("illegal symbol");
 
             /*
             Равнозначные выражения.
@@ -84,21 +84,21 @@ public class UserValidator {
         }
 
         // 5. До собаки должен быть хотя бы 1 символ == собака не первая в строке. Т.е. ее индекс не равен 0
-        if (indexAt == 0) throw new utils.EmailValidateException("@ should not first");
+        if (indexAt == 0) throw new utils.validator.EmailValidateException("@ should not first");
 
         // 6. Первый символ - должна быть буква
         // Если 0-й символ НЕ является буквой, то email не подходит = return false;
         char firstChar = email.charAt(0);
-        if (!Character.isAlphabetic(firstChar)) throw new utils.EmailValidateException("first symbol should be alphabetic");
+        if (!Character.isAlphabetic(firstChar)) throw new utils.validator.EmailValidateException("first symbol should be alphabetic");
 
 
         // Все проверки пройдены. email подходит.
     }
 
-    public static void isPasswordValid(String password)  throws utils.PasswordValidateException {
+    public static void isPasswordValid(String password)  throws utils.validator.PasswordValidateException {
 
         if (password == null || password.length() < 8) {
-            throw new utils.PasswordValidateException("Password should be at least 8 characters");
+            throw new utils.validator.PasswordValidateException("Password should be at least 8 characters");
         }
 
         boolean isDigit = false;
@@ -140,7 +140,7 @@ public class UserValidator {
 //        if (errorMessage.length() > initLength) throw new PasswordValidateException(errorMessage);
 
         // Проверяем, если хотя бы в одной из переменных окажется false, то пароль не прошел валидацию. Бросаем исключение.
-        if (!(isDigit && isUpperCase && isLowerCase && isSpecialSymbol)) throw new utils.PasswordValidateException(errorMessage);
+        if (!(isDigit && isUpperCase && isLowerCase && isSpecialSymbol)) throw new utils.validator.PasswordValidateException(errorMessage);
 
 
         // Если хотя бы в одной переменной останется значение false, то весь пароль НЕ будет признан валидным = (признан не валидным)

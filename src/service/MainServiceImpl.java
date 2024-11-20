@@ -5,47 +5,16 @@ import repository.UserRepository;
 import utils.validator.UserValidator;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
+/**
+ * Реализация MainService для управления пользователями, счетами и транзакциями.
+ */
 public class MainServiceImpl implements MainService {
 
-    private UserRepository userRepository;
-
     // ================= CREATE =================
-
-    //-----------------------User—-----------------------------
-    @Override
-    public User registerUser(String name, String email, String password) {
-        try { // Валидация данных
-            UserValidator.isUsernameValid(name);
-            UserValidator.isEmailValid(email);
-            UserValidator.isPasswordValid(password);
-
-            // Проверка, существует ли email
-            if (userRepository.isEmailExists(email)) {
-                System.out.println("Пользователь с таким email уже существует.");
-                return null;
-            }
-            // Создание и сохранение нового пользователя
-            return userRepository.addUser()
-                    addUser(currentID.getAndIncrement(), name, email, password);
-        } catch (Exception e) {
-            System.out.println("Ошибка регистрации пользователя: " + e.getMessage());
-            return null;
-        }
-
-
-
-
-
-
-
-
-        return null;
-    }
 
     //-----------------------Account----------------------------
     @Override
@@ -103,36 +72,22 @@ public class MainServiceImpl implements MainService {
     }
 
     // ======================= READ ============================
-    // -----------------------User—-----------------------------
-    @Override
-    public User getUserByID(int userID) {
-        return null;
-    }
 
-    @Override
-    public List<User> getAllUsers() {
-        return List.of();
-    }
+/*
+        @Override
+        public Map<Integer, User> getUsersByRole(UserRole... roles) {
+            // Преобразуем массив ролей в Set для удобства поиска
+            Set<UserRole> roleSet = new HashSet<>(Arrays.asList(roles));
 
-    @Override
-    public User getActiveUser(int userID) {
-        return null;
-    }
+            // Фильтруем пользователей по их роли и собираем их в карту
+            return userRepository.getAllUsers().stream()
+                    .filter(user -> roleSet.contains(user.getRole())) // Фильтрация по роли
+                    .collect(Collectors.toMap(User::getUserID, user -> user));
 
-    @Override
-    public Map<Integer, User> getUsersByRole(UserRole... roles) {
-        return Map.of();
-    }
 
-    @Override
-    public boolean loginUser(String email, String password) {
-        return false;
-    }
+ */
 
-    @Override
-    public void logoutUser() {
 
-    }
     //—-----------------------Account----------------------------
     @Override
     public Map<Integer, User> getAllAccounts() {
@@ -165,10 +120,6 @@ public class MainServiceImpl implements MainService {
     }
 
     // ======================DELETE=================================
-    @Override
-    public boolean deleteUserByID(int userID) {
-        return false;
-    }
 
     @Override
     public Account deleteAccountByID(int accountID) {
