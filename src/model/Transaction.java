@@ -11,7 +11,8 @@ public class Transaction {
 
     private static final AtomicInteger idCounter = new AtomicInteger(0);
 
-    private int transactionID;
+    private int userID;
+    private final int transactionID;
     private int sourceAccountID;
     private int targetAccountID;
     private TransactionType transactionType;
@@ -23,8 +24,20 @@ public class Transaction {
     //constructors
 
     //для зачисления и списания
-    public Transaction(int accountID, TransactionType transactionType, BigDecimal amount) {
+    public Transaction(BigDecimal amount) {
 
+        this.transactionID = idCounter.incrementAndGet();
+        //TODO привязать к аккаунту обменки
+        //this.targetAccountID = accountID;
+        this.transactionType = TransactionType.FEE;
+        this.amount = amount;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    //для зачисления и списания
+    public Transaction(int userID, int accountID, TransactionType transactionType, BigDecimal amount) {
+
+        this.userID = userID;
         this.transactionID = idCounter.incrementAndGet();
         this.transactionType = transactionType;
         this.amount = amount;
@@ -42,8 +55,9 @@ public class Transaction {
     }
 
     //для обменных операций
-    public Transaction(int sourceAccountID, int targetAccountID, BigDecimal amount) {
+    public Transaction(int userID, int sourceAccountID, int targetAccountID, BigDecimal amount) {
 
+        this.userID = userID;
         this.transactionID = idCounter.incrementAndGet();
         this.sourceAccountID = sourceAccountID;
         this.targetAccountID = targetAccountID;

@@ -54,15 +54,12 @@ public class MainServiceImpl implements MainService {
         return null;
     }
 
-    @Override
-    public boolean convertToBigDecimal(double value) {
-        return false;
-    }
-
+    /*
     @Override
     public BigDecimal calculateFee(BigDecimal amount, double feeRate) {
         return null;
     }
+     */
 
     @Override
     public List<Transaction> getTransactionHistoryByAccountID(int accountID) {

@@ -40,11 +40,10 @@ public interface MainService  {
     //Осуществляет пересчет из любой валюты в евро, возвращает сумму в BigDecimal
     BigDecimal toEUR(CustCurrency custCurrency, BigDecimal amount);
 
-    // Переводит значение переменной из double в bigDecimal
-    boolean convertToBigDecimal(double value);
-
+    /*
     //Вычисляет комиссию по операции в формате BigDecimal
     BigDecimal calculateFee(BigDecimal amount, double feeRate);
+    */
 
     // Показать историю транзакций по ID счета
     List<Transaction> getTransactionHistoryByAccountID(int accountID);
