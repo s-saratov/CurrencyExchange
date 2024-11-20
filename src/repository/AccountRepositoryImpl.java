@@ -18,10 +18,8 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     // Конструктор
     public AccountRepositoryImpl(Map<Integer, Account> accounts, AtomicInteger currentID) {
-        Account accountOffice = new Account(777, )
-        this.accounts = new HashMap<>(List.of(
-            new Account
-        ));
+        //Account accountOffice = new Account(777, )
+        this.accounts = new HashMap<>();
     }
 
     // Методы
