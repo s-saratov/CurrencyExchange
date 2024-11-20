@@ -7,6 +7,7 @@ import model.User;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public interface AccountRepository {
 
@@ -17,8 +18,8 @@ public interface AccountRepository {
 
     // READ
 
-    // Возвращает список всех счетов
-    List<Account> getAllAccounts();
+    // Возвращает карту всех счетов
+    public Map<Integer, List<Account>> getAccounts();
 
     // Возвращает счёт по ID
     Account getByID(int id);
