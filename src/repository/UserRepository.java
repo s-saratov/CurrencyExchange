@@ -1,38 +1,49 @@
 package repository;
-/*
-import model.User;
 
-public interface UserRepository {
-
-import model.Account;
-import model.User;
-
-import javax.management.relation.Role;
-import java.util.List;
-import java.util.Objects;
-import java.util.Map;
 import model.User;
 import model.UserRole;
 
-    public interface UserRepository {
+import java.util.List;
+
+public interface UserRepository {
 
 
-        void addAccountToUserAccounts(int userId, int accountId);
-        User addUser(int userId, String name, String email, String password);
+
+    User registerUser(String name, String email, String password, UserRole role);
+
+    boolean logoutUser(int userId);
+    boolean loginUser(int userId, String password);
 
 
-        List<User> getUserByName(String name);
-        boolean isEmailExists(String email);
 
-        //Используем UserRole
-        List<User> getUsersByRole(UserRole... roles);
-        User getUserByEmail(String email);
-        User getUserByID(int userId);
+    //добавление аккаунта пользователю
+    void addAccountToUserAccounts(int userId, int accountId);
 
-        //Удаление
-        boolean deleteUser(int userId);
-        void removeAccountFromUserAccounts(int userId, int accountId);
-    }
+    //добавление нового пользователя
+    User addUser(int userId, String name, String email, String password);
+
+    //Получение списка пользователей по имени
+    List<User> getUserByName(String name);
+
+    //Проверка существования email
+    boolean isEmailExists(String email);
+
+    //Получение списка пользователей по ролям
+    List<User> getUsersByRole(UserRole... roles);
+
+    //Получение пользователя по email
+    User getUserByEmail(String email);
+
+    //Получение пользователя по ID
+    User getUserByID(int userId);
+
+    //Удаление пользователя
+    boolean deleteUser(int userId);
+
+    //Удаление аккаунта у пользователя
+    void removeAccountFromUserAccounts(int userId, int accountId);
+}
+
 
 
 //    // Проверяет равенство двух счетов, возвращает статус

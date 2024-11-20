@@ -1,93 +1,123 @@
 package repository;
 
-
 import model.User;
 import model.UserRole;
-import model.Account;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    //Храним пользователей
+    @Override
+    public User registerUser(String name, String email, String password, UserRole role) {
+        //проверка, существует ли пользователь с таким email
+        if (isEmailExists(email)) {
+            System.err.println("Пользователь с email " + email + " уже существует.");
+            return null; //возвращаем null, если email уже занят
+        }
+
+        //генерируем уникальный ID
+        int userId = currentID.getAndIncrement();
+        //создаем нового пользователя
+        User newUser = new User(userId, name, email, password, role);
+        //добавляем пользователя в карту
+        users.put(userId, newUser);
+        writeTransactionLog("Зарегистрирован новый пользователь: " + newUser);
+
+        //возвращаем зарегистрированного пользователя
+        return newUser;
+    }
+
+    //карта для отслеживания, кто авторизован
+    private final Map<Integer, Boolean> userSessions = new HashMap<>();
+
+    //логин пользователя
+    public boolean loginUser(int userId, String password) {
+        User user = users.get(userId);
+        if (user != null && user.getPassword().equals(password)) {
+            userSessions.put(userId, true); // Авторизуем пользователя
+            writeTransactionLog("Пользователь с ID " + userId + " вошел в систему.");
+            return true;
+        }
+        System.err.println("Неверный ID пользователя или пароль.");
+        return false;
+    }
+
+    //Logout пользователя
+    public boolean logoutUser(int userId) {
+        if (userSessions.containsKey(userId) && userSessions.get(userId)) {
+            //Завершаем сессию пользователя
+            userSessions.put(userId, false);
+            writeTransactionLog("Пользователь с ID " + userId + " вышел из системы.");
+            return true;
+        }
+        System.err.println("Пользователь с ID " + userId + "не авторизован.");
+        return false;
+    }
+
+
+
+    //карта пользователей
     private final Map<Integer, User> users = new HashMap<>();
-    //Храним счета пользователей
-    private final Map<Integer, List<Account>> userAccounts = new HashMap<>();
-
-    //Генерация уникальных ID
+    //генерация уникальных ID
     private final AtomicInteger currentID = new AtomicInteger(1);
+    //Имя файла для логирования
+    private static final String LOG_FILE = "log.txt";
 
-    //Конструктор с первичными данными
+    //Конструктор с предустановленными пользователями
     public UserRepositoryImpl() {
+        User user1 = new User(currentID.getAndIncrement(), "Alex", "alexe@example.com", "password1", UserRole.USER);
+        User user2 = new User(currentID.getAndIncrement(), "Bogdan", "bogdan@example.com", "password2", UserRole.ADMIN);
 
-        //Добавляем первичного пользователя
-        User user1 = new User(currentID.getAndIncrement(), "Alex", "alexe@example.com", "password123", UserRole.USER);
-        User user2 = new User(currentID.getAndIncrement(), "Bogdan", "bogdan@example.com", "password456", UserRole.ADMIN);
-        User user3 = new User(currentID.getAndIncrement(), "Andrey", "andrey@example.com", "password789", UserRole.BLOCKED);
-
-        //Добавляем пользователей в карту
         users.put(user1.getUserID(), user1);
         users.put(user2.getUserID(), user2);
-        users.put(user3.getUserID(), user3);
 
-        //Добавляем набор счетов для каждого пользователя
-        userAccounts.put(user1.getUserID(), Arrays.asList(new Account(101), new Account(102)));
-        userAccounts.put(user2.getUserID(), Arrays.asList(new Account(201), new Account(202)));
-        userAccounts.put(user3.getUserID(), Arrays.asList(new Account(301), new Account(302)));
+        writeTransactionLog("Инициализация пользователей: " + users);
     }
 
-    //Остальная реализация интерфейса UserRepository
-
     @Override
+    //реализация добавления аккаунта пользователю
     public void addAccountToUserAccounts(int userId, int accountId) {
 
-        userAccounts.computeIfAbsent(userId, k -> new ArrayList<>()).add(new Account(accountId));
     }
 
     @Override
+
     public User addUser(int userId, String name, String email, String password) {
-
-        User newUser = new User(userId, name, email, password, UserRole.USER);
+        User newUser = new User(userId, name, email, password);
         users.put(userId, newUser);
-        userAccounts.put(userId, new ArrayList<>());
+        writeTransactionLog("Добавлен пользователь: " + newUser);
         return newUser;
-
     }
 
     @Override
     public List<User> getUserByName(String name) {
 
-        List<User> result = new ArrayList<>();
-        for (User user : users.values()) {
-            if (user.getName().equalsIgnoreCase(name)) {
-                result.add(user);
-            }
-        }
-        return result;
+        return users.values().stream()
+                .filter(user -> user.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean isEmailExists(String email) {
-        return users.values().stream().anyMatch(user -> user.getEmail().equalsIgnoreCase(email));
+
+        return users.values().stream()
+                .anyMatch(user -> user.getEmail().equalsIgnoreCase(email));
     }
 
     @Override
     public List<User> getUsersByRole(UserRole... roles) {
 
-        List<User> result = new ArrayList<>();
         Set<UserRole> roleSet = new HashSet<>(Arrays.asList(roles));
-        for (User user : users.values()) {
-            if (roleSet.contains(user.getRole())) {
-                result.add(user);
-            }
-        }
-        return result;
+        return users.values().stream()
+                .filter(user -> roleSet.contains(user.getRole()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public User getUserByEmail(String email) {
-
         return users.values().stream()
                 .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst()
@@ -96,7 +126,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserByID(int userId) {
-
         return users.get(userId);
     }
 
@@ -105,18 +134,34 @@ public class UserRepositoryImpl implements UserRepository {
 
         if (users.containsKey(userId)) {
             users.remove(userId);
-            userAccounts.remove(userId);
+            writeTransactionLog("Удалён пользователь с ID: " + userId);
             return true;
         }
         return false;
     }
 
     @Override
+    //реализация удаления аккаунта у пользователя
     public void removeAccountFromUserAccounts(int userId, int accountId) {
 
-        List<Account> accounts = userAccounts.get(userId);
-        if (accounts != null) {
-            accounts.removeIf(account -> account.getAccountId() == accountId);
+    }
+
+    //логирование операций
+    private void writeTransactionLog(String transaction) {
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE, true))) {
+            writer.write(transaction);
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Ошибка записи в лог-файл: " + e.getMessage());
+        }
+    }
+
+    public void readTransactionLog() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(LOG_FILE))) {
+            reader.lines().forEach(System.out::println);
+        } catch (IOException e) {
+            System.err.println("Ошибка чтения лог-файла: " + e.getMessage());
         }
     }
 }
