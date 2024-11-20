@@ -39,7 +39,7 @@ public class AccountRepositoryImpl implements AccountRepository {
                 initialBalance,
                 AccountStatus.ACTIVE
         );
-        accounts.computeIfAbsent(owner.getId(), k -> new ArrayList<>()).add(newAccount);
+        accounts.computeIfAbsent(owner.getUserID(), k -> new ArrayList<>()).add(newAccount);
         // TODO: дописать проверки
     }
 

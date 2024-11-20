@@ -40,8 +40,6 @@ public class User {
         return userID;
     }
 
-   public int getUserID() { return userID; }
-
     public String getName() {
         return name;
     }
