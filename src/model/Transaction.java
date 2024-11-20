@@ -95,6 +95,10 @@ public class Transaction {
         return currencyRate;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
     //setters
     public void setSourceAccountID(int sourceAccountID) {
         this.sourceAccountID = sourceAccountID;

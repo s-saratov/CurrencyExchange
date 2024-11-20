@@ -65,7 +65,6 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         BigDecimal netAmount = amount.subtract(depositFee);
 
         //зачисляем сумму комиссии на счёт
-        //TODO перевести в евро перед отправленим в накопитель
         //получаем код валюты аккаунта-рецепиента
         String targetAccountCurrencyCode = targetAccount.getCurrency().getCurrencyCode();
         BigDecimal depositFeeEuro = convertToBaseCurrency(targetAccountCurrencyCode, depositFee);
@@ -88,7 +87,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //TODO
         // добавить трансакцию в список трансакций счёта
-        accountRepository.getTransactions().add(depositFeeEuro);
+        accountRepository.getTransactions().add(depositTransaction);
     }
 
     @Override
@@ -204,7 +203,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //создаем транзакции для обмена валюты
         Transaction exchangeTransaction = new Transaction(
-                userId,
+                userID,
                 sourceAccountID,
                 targetAccountID,
                 amount
@@ -233,26 +232,27 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     @Override
     public List<Transaction> getTransactionsByAccountId(int accountId) {
-        //TODO
-        List<Transaction> accountTransaction = new ArrayList<>();
 
-        for (Transaction transaction : transactionList) {
-            /*
-            if () {
-            }
-
-             */
+        //проверяем, есть ли записи для данного аккаунта в карте accountOperations
+        if (accountRepository.getAccountTransactions().containsKey(accountId)) {
+            //если есть, возвращаем список операций по данному аккаунту
+            return accountRepository.getAccountTransactions().get(accountId);
+        } else {
+            //если записи нет, возвращаем пустой список
+            return List.of();
         }
-
-        return List.of();
     }
 
     @Override
     public List<Transaction> getTransactionsByUserId(int userId) {
 
-
-        //TODO
-        return List.of();
+        List<Transaction> userTransactionList = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.getUserID() == userId) {
+                userTransactionList.add(transaction);
+            }
+        }
+        return userTransactionList;
     }
 
     @Override
@@ -262,8 +262,16 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     @Override
     public List<Transaction> getAllTransactionsByCurrency(String currentCode) {
-        //TODO
-        return List.of();
+
+        List<Transaction> transactionsListByCurrency = new ArrayList<>();
+
+        for (Transaction transaction : transactionList){
+            Account account = accountRepository.getByID(transaction.getAccountID());
+            if (account.getCurrency().getCurrencyCode().equals(currentCode)) {
+                transactionsListByCurrency.add(transaction);
+            }
+        }
+        return transactionsListByCurrency;
     }
 
 
