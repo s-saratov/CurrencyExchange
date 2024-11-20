@@ -1,7 +1,6 @@
 package model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,20 +19,18 @@ public class Transaction {
 
     private CurrencyRate currencyRate;
 
-   //constructors
-     public Transaction(int sourceAccountID, int targetAccountID, TransactionType transactionType, BigDecimal amount) {
+    // Конструктор
+    public Transaction(int sourceAccountID, int targetAccountID, TransactionType transactionType, BigDecimal amount, CurrencyRate currencyRate) {
         this.transactionID = idCounter.incrementAndGet();
         this.sourceAccountID = sourceAccountID;
         this.targetAccountID = targetAccountID;
         this.transactionType = transactionType;
         this.amount = amount;
-
-        this.currencyRate = currencyRate;//???
-
+        this.currencyRate = currencyRate;
         this.timestamp = LocalDateTime.now();
     }
 
-    //getters
+    // Геттеры
     public int getTransactionID() {
         return transactionID;
     }
@@ -62,12 +59,11 @@ public class Transaction {
         return timestamp;
     }
 
-
     public CurrencyRate getCurrencyRate() {
         return currencyRate;
     }
 
-    //setters
+    // Сеттеры
     public void setSourceAccountID(int sourceAccountID) {
         this.sourceAccountID = sourceAccountID;
     }
@@ -84,8 +80,11 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public void setCurrencyRate(CurrencyRate currencyRate) {
+        this.currencyRate = currencyRate;
+    }
 
-    //methods
+    // Методы
     @Override
     public String toString() {
         return "\nTransaction {" +
@@ -101,11 +100,18 @@ public class Transaction {
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Transaction that)) return false;
-
-        return transactionID == that.transactionID && sourceAccountID == that.sourceAccountID && targetAccountID == that.targetAccountID && Double.compare(feeRate, that.feeRate) == 0 && transactionType == that.transactionType && Objects.equals(amount, that.amount) && Objects.equals(timestamp, that.timestamp) && Objects.equals(currencyRate, that.currencyRate);
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return transactionID == that.transactionID &&
+                sourceAccountID == that.sourceAccountID &&
+                targetAccountID == that.targetAccountID &&
+                Double.compare(that.feeRate, feeRate) == 0 &&
+                transactionType == that.transactionType &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(timestamp, that.timestamp) &&
+                Objects.equals(currencyRate, that.currencyRate);
     }
 
     @Override
@@ -121,5 +127,3 @@ public class Transaction {
         return result;
     }
 }
-
-

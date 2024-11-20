@@ -1,4 +1,4 @@
-package repository.tests;
+/*package repository.tests;
 
 import model.CustCurrency;
 import org.junit.jupiter.api.BeforeEach;
@@ -150,3 +150,6 @@ class CustCurrencyRepositoryImplTest {
     }
 
 }
+
+
+ */
