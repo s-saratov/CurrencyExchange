@@ -5,23 +5,57 @@ import model.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionRepositoryImpl implements TransactionRepository {
 
     private static final double FEE_RATE = 1.5;
-    private BigDecimal totalBaseCurrencyFeesCollected = BigDecimal.ZERO;
 
     AccountRepository accountRepository;
     CurrencyRateRepository currencyRateRepository;
 
     List<Transaction> transactionList;
 
+    @Override
+    public void feeDepositTransaction(BigDecimal feeAmount) {
+
+        //находим сервисный счёт обменки
+        //TODO указать ID сервисного счёта обменки
+        Account serviceAccount = accountRepository.getByID(777);
+
+        //проверяем, был ли найден
+        if (serviceAccount == null) {
+            System.out.println("Account not found!");
+            return;
+        }
+
+        // Получаем текущий список транзакций аккаунта
+        List<Transaction> serviceAccountTransactions = accountRepository.getTransactions();
+
+        //проверяем, найден ли список транзакций, и создаём его, если он отсутствует
+        if (serviceAccountTransactions == null) {
+            System.out.println("Transaction list from service account not found!");
+            return;
+        }
+
+        //зачисляем сумму комиссии на сервисный счёт и обновляем баланс аккаунта
+        BigDecimal updateBalance = serviceAccount.getBalance().add(feeAmount);
+        serviceAccount.setBalance(updateBalance);
+
+        //создаём объект трансакции
+        Transaction feeDepositTransaction = new Transaction(feeAmount);
+
+        //добавляем нашу трансакцию в список трансакций
+        transactionList.add(feeDepositTransaction);
+
+        //TODO
+        // добавить трансакцию в список трансакций сервисного счёта обменки
+        accountRepository.getTransactions().add(feeDepositTransaction);
+    }
 
     @Override
-    public void depositTransaction(int accountID, TransactionType transactionType, BigDecimal amount) {
+    public void depositTransaction(int userId, int accountID, TransactionType transactionType, BigDecimal amount) {
 
         //находим целевой счёт
         Account targetAccount = accountRepository.getByID(accountID);
@@ -30,12 +64,12 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         BigDecimal depositFee = amount.multiply(BigDecimal.valueOf(FEE_RATE));
         BigDecimal netAmount = amount.subtract(depositFee);
 
-        //накапливаем сумму комиссии
+        //зачисляем сумму комиссии на счёт
         //TODO перевести в евро перед отправленим в накопитель
         //получаем код валюты аккаунта-рецепиента
         String targetAccountCurrencyCode = targetAccount.getCurrency().getCurrencyCode();
         BigDecimal depositFeeEuro = convertToBaseCurrency(targetAccountCurrencyCode, depositFee);
-        totalBaseCurrencyFeesCollected = totalBaseCurrencyFeesCollected.subtract(depositFeeEuro);
+        feeDepositTransaction(depositFeeEuro);
 
         //зачисляем сумму за вычетом комиссии на целевой счёт и обновляем баланс аккаунта
         BigDecimal updateBalance = targetAccount.getBalance().add(netAmount);
@@ -43,6 +77,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //создаём объект трансакции
         Transaction depositTransaction = new Transaction(
+                userId,
                 accountID,
                 transactionType,
                 amount
@@ -50,10 +85,14 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //добавляем нашу операцию в список трансакций
         transactionList.add(depositTransaction);
+
+        //TODO
+        // добавить трансакцию в список трансакций счёта
+        accountRepository.getTransactions().add(depositFeeEuro);
     }
 
     @Override
-    public void withdrawTransaction(int accountID, TransactionType transactionType, BigDecimal amount) {
+    public void withdrawTransaction(int userId, int accountID, TransactionType transactionType, BigDecimal amount) {
 
         //находим счёт, с которого будет произведено списание средств
         Account sourceAccount = accountRepository.getByID(accountID);
@@ -71,15 +110,16 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         BigDecimal updateBalance = sourceAccount.getBalance().add(totalAmount);
         sourceAccount.setBalance(updateBalance);
 
-        //накапливаем сумму комиссии, переведенную в евро
+        //зачисляем сумму комиссии, переведенную в евро
         //TODO перевести в евро перед отправленим в накопитель
         //получаем код валюты аккаунта
         String sourceAccountCurrencyCode = sourceAccount.getCurrency().getCurrencyCode();
         BigDecimal withdrawFeeEuro = convertToBaseCurrency(sourceAccountCurrencyCode, withdrawFee);
-        totalBaseCurrencyFeesCollected = totalBaseCurrencyFeesCollected.add(withdrawFeeEuro);
+        feeDepositTransaction(withdrawFeeEuro);
 
         //создаём объект трансакции
         Transaction withdrawTransaction = new Transaction(
+                userId,
                 accountID,
                 transactionType,
                 amount
@@ -87,6 +127,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //добавляем нашу операцию в список трансакций
         transactionList.add(withdrawTransaction);
+
+        //TODO
+        // добавить трансакцию в список трансакций счёта
+        accountRepository.getTransactions().add(withdrawTransaction);
     }
 
     @Override
@@ -107,7 +151,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public boolean exchangeCurrency(int sourceAccountID, int targetAccountID, BigDecimal amount) {
+    public boolean exchangeCurrency(int userID, int sourceAccountID, int targetAccountID, BigDecimal amount) {
         // проверяем наличие обоих аккаунтов
         Account fromAccount = accountRepository.getByID(sourceAccountID);
         Account toAccount = accountRepository.getByID(targetAccountID);
@@ -144,8 +188,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         //рассчитываем комиссию и добавляем её из суммы операции
         BigDecimal exchangeFeeEuro = baseCurrencyAmount.multiply(BigDecimal.valueOf(FEE_RATE));
         BigDecimal netBaseCurrencyAmount = baseCurrencyAmount.subtract(exchangeFeeEuro);
-        //накапливаем сумму комиссии
-        totalBaseCurrencyFeesCollected = totalBaseCurrencyFeesCollected.add(exchangeFeeEuro);
+        //зачисляем сумму комиссии на счёт обменки
+        feeDepositTransaction(exchangeFeeEuro);
 
         // конвертируем сумму из базовой валюты в целевую валюту
         BigDecimal targetCurrencyAmount = netBaseCurrencyAmount.multiply(toCurrencyRate).setScale(2, RoundingMode.HALF_UP);
@@ -160,6 +204,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //создаем транзакции для обмена валюты
         Transaction exchangeTransaction = new Transaction(
+                userId,
                 sourceAccountID,
                 targetAccountID,
                 amount
@@ -167,6 +212,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //сохраняем транзакцию в репозитории
         transactionList.add(exchangeTransaction);
+
+        //TODO
+        // добавить трансакцию в список трансакций счёта
+        accountRepository.getTransactions().add(exchangeTransaction);
 
         return true; //операция выполнена успешно
     }
@@ -184,7 +233,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     @Override
     public List<Transaction> getTransactionsByAccountId(int accountId) {
-
+        //TODO
         List<Transaction> accountTransaction = new ArrayList<>();
 
         for (Transaction transaction : transactionList) {
@@ -199,9 +248,24 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
+    public List<Transaction> getTransactionsByUserId(int userId) {
+
+
+        //TODO
+        return List.of();
+    }
+
+    @Override
     public List<Transaction> getAllTransactions(String currentCode) {
         return transactionList;
     }
+
+    @Override
+    public List<Transaction> getAllTransactionsByCurrency(String currentCode) {
+        //TODO
+        return List.of();
+    }
+
 
     @Override
     public List<Transaction> getTransactionsByDate(LocalDate date) {
