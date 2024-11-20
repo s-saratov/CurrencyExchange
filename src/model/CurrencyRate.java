@@ -1,71 +1,76 @@
 package model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Currency;
+import model.CurrencyRate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class CurrencyRate {
 
-    private Currency currency;
+    private final String currencyCode;
+    private BigDecimal exchangeRate;
+    private final LocalDateTime timestamp;
+    private CustCurrency custCurrency;
     private double currencyRate;
-    private LocalDateTime timestamp;
 
-    //constructor
-    public CurrencyRate(Currency currency, double currencyRate, LocalDateTime timestamp) {
-        this.currency = currency;
-        this.currencyRate = currencyRate;
+    // Конструктор
+    public CurrencyRate(String currencyCode, BigDecimal exchangeRate) {
+        if (currencyCode == null || currencyCode.isEmpty()) {
+            throw new IllegalArgumentException("Currency code cannot be null or empty.");
+        }
+        if (exchangeRate == null || exchangeRate.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Exchange rate must be greater than 0.");
+        }
+        this.currencyCode = currencyCode.toUpperCase();
+        this.exchangeRate = exchangeRate;
         this.timestamp = LocalDateTime.now();
     }
 
-    //getters
-    public Currency getCurrency() {
-        return currency;
+    // Getters
+    public String getCurrencyCode() {
+        return currencyCode;
     }
 
-    public double getCurrencyRate() {
-        return currencyRate;
+    public BigDecimal getExchangeRate() {
+        return exchangeRate;
     }
 
-    public LocalDateTime getTimestamp() {
+    public LocalDateTime getAddedDate() {
         return timestamp;
     }
 
-    //setters
-    public void setCurrencyRate(double currencyRate) {
-        this.currencyRate = currencyRate;
+    // Setters
+    public void setExchangeRate(BigDecimal exchangeRate) {
+        if (exchangeRate.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Exchange rate must be greater than 0.");
+        }
+        this.exchangeRate = exchangeRate;
     }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    //methods
     @Override
     public String toString() {
-        return "\nCurrencyRate{" +
-                "currency: " + currency +
-                ", currencyRate: " + currencyRate +
-                ", timestamp :" + timestamp +
-                '}';
-    }
+        return "CurrencyRate" +
+                "custCurrency=" + custCurrency +
+                ", currencyRate=" + currencyRate +
+                ", timestamp=" + timestamp;
 
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CurrencyRate)) return false;
-
-        CurrencyRate that = (CurrencyRate) o;
-        return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(currency, that.currency) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(currency);
+        int result = Objects.hashCode(custCurrency);
         result = 31 * result + Double.hashCode(currencyRate);
         result = 31 * result + Objects.hashCode(timestamp);
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CurrencyRate that = (CurrencyRate) o;
+        return Double.compare(currencyRate, that.currencyRate) == 0 && Objects.equals(custCurrency, that.custCurrency) && Objects.equals(timestamp, that.timestamp);
     }
 }
 

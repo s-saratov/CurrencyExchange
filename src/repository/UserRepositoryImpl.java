@@ -131,7 +131,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean deleteUser(int userId) {
-
         if (users.containsKey(userId)) {
             users.remove(userId);
             writeTransactionLog("Удалён пользователь с ID: " + userId);
@@ -143,6 +142,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     //реализация удаления аккаунта у пользователя
     public void removeAccountFromUserAccounts(int userId, int accountId) {
+
 
     }
 
@@ -162,7 +162,7 @@ public class UserRepositoryImpl implements UserRepository {
             reader.lines().forEach(System.out::println);
         } catch (IOException e) {
             System.err.println("Ошибка чтения лог-файла: " + e.getMessage());
+
         }
     }
 }
-
