@@ -24,6 +24,7 @@ public class Transaction {
 
     //для комиссии
     public Transaction(BigDecimal amount) {
+
         this.transactionID = idCounter.incrementAndGet();
         this.transactionType = TransactionType.FEE;
         this.amount = amount;

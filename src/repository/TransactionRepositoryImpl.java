@@ -55,6 +55,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     @Override
     public void feeDepositTransaction(BigDecimal amount) {
 
+        /*
+        //---------------------------------------------------------
         //находим целевой счёт
         Account targetAccount = accountRepository.getByID(accountID);
 
@@ -82,6 +84,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         //добавляем нашу операцию в список трансакций
         transactionList.add(depositTransaction);
+ */
     }
 
     @Override
