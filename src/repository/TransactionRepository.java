@@ -14,6 +14,9 @@ public interface TransactionRepository {
     //зачисление средств на счёт
     void depositTransaction(int accountID, TransactionType transactionType, BigDecimal amount);
 
+    //зачисление комиссии на счет пункта обменных валют
+    void feeDepositTransaction(BigDecimal amount);
+
     //списание средств со счёта
     void withdrawTransaction(int accountID, TransactionType transactionType, BigDecimal amount);
 

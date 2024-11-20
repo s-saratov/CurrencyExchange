@@ -53,6 +53,38 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
+    public void feeDepositTransaction(BigDecimal amount) {
+
+        //находим целевой счёт
+        Account targetAccount = accountRepository.getByID(accountID);
+
+        // рассчитываем комиссию и вычитаем её из суммы операции
+        BigDecimal depositFee = amount.multiply(BigDecimal.valueOf(FEE_RATE));
+        BigDecimal netAmount = amount.subtract(depositFee);
+
+        //накапливаем сумму комиссии
+        //TODO перевести в евро перед отправленим в накопитель
+        //получаем код валюты аккаунта-рецепиента
+        String targetAccountCurrencyCode = targetAccount.getCurrency().getCurrencyCode();
+        BigDecimal depositFeeEuro = convertToBaseCurrency(targetAccountCurrencyCode, depositFee);
+        totalBaseCurrencyFeesCollected = totalBaseCurrencyFeesCollected.subtract(depositFeeEuro);
+
+        //зачисляем сумму за вычетом комиссии на целевой счёт и обновляем баланс аккаунта
+        BigDecimal updateBalance = targetAccount.getBalance().add(netAmount);
+        targetAccount.setBalance(updateBalance);
+
+        //создаём объект трансакции
+        Transaction depositTransaction = new Transaction(
+                accountID,
+                transactionType,
+                amount
+        );
+
+        //добавляем нашу операцию в список трансакций
+        transactionList.add(depositTransaction);
+    }
+
+    @Override
     public void withdrawTransaction(int accountID, TransactionType transactionType, BigDecimal amount) {
 
         //находим счёт, с которого будет произведено списание средств

@@ -22,6 +22,14 @@ public class Transaction {
 
     //constructors
 
+    //для комиссии
+    public Transaction(BigDecimal amount) {
+        this.transactionID = idCounter.incrementAndGet();
+        this.transactionType = TransactionType.FEE;
+        this.amount = amount;
+        this.timestamp = LocalDateTime.now();
+    }
+
     //для зачисления и списания
     public Transaction(int accountID, TransactionType transactionType, BigDecimal amount) {
 

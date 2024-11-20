@@ -1,9 +1,7 @@
 package repository;
 
-import model.Account;
+import model.*;
 import model.CustCurrency;
-import model.CustCurrency;
-import model.User;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -14,12 +12,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AccountRepositoryImpl implements AccountRepository{
 
     // Поля
+    //карта аккаунтов
     Map<Integer, Account> accounts;     // карта счетов
     AtomicInteger currentID;            // объект, отвечающий за генерацию уникальных ID
 
     // Конструктор
     public AccountRepositoryImpl(Map<Integer, Account> accounts, AtomicInteger currentID) {
-        this.accounts = new HashMap<>();
+        Account accountOffice = new Account(777, )
+        this.accounts = new HashMap<>(List.of(
+            new Account
+        ));
     }
 
     // Методы

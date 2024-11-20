@@ -2,7 +2,6 @@ package model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import model.CustCurrency;
 
 /**
  * @author olgakharina
@@ -39,7 +38,7 @@ public class Account {
     }
 
     // Конструктор с параметром статуса счёта
-    public Account(LocalDate creationDate, int accountID, User owner, CustCurrency currency, BigDecimal balance, AccountStatus status) {
+    public Account(int accountID, User owner, CustCurrency currency, BigDecimal balance, AccountStatus status) {
         this.accountID = accountID;
         // Устанавливается текущая дата
         this.creationDate = LocalDate.now();
