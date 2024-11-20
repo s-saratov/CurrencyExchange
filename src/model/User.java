@@ -38,6 +38,8 @@ public class User {
 
     // Геттеры и сеттеры
 
+   public int getUserID() { return userID; }
+
     public String getName() {
         return name;
     }

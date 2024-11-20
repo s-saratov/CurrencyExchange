@@ -1,59 +1,25 @@
 package repository;
-/*
+
 import model.User;
+import model.UserRole;
+import java.util.List;
 
 public interface UserRepository {
 
-import model.Account;
-import model.User;
+    // CREATE
+    void addAccountToUserAccounts(int userID, int accountId);
+    User addUser(int userID, String name, String email, String password);
 
-import javax.management.relation.Role;
-import java.util.List;
-import java.util.Objects;
-import java.util.Map;
-import model.User;
-import model.UserRole;
+    // READ
+    List<User> getUserByName(String name);
+    boolean isEmailExists(String email);
+    List<User> getUsersByRole(UserRole... roles); // Используем UserRole
+    User getUserByEmail(String email);
+    User getUserByID(int userID);
 
-    public interface UserRepository {
-
-
-        void addAccountToUserAccounts(int userId, int accountId);
-        User addUser(int userId, String name, String email, String password);
-
-
-        List<User> getUserByName(String name);
-        boolean isEmailExists(String email);
-
-        //Используем UserRole
-        List<User> getUsersByRole(UserRole... roles);
-        User getUserByEmail(String email);
-        User getUserByID(int userId);
-
-        //Удаление
-        boolean deleteUser(int userId);
-        void removeAccountFromUserAccounts(int userId, int accountId);
-    }
-
-
-//    // Проверяет равенство двух счетов, возвращает статус
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) return true;                  // Сравнение с самим собой
-//        if (obj == null || getClass() != obj.getClass()) return false; // Проверка на null и класс
-//        Account account = (Account) obj;
-//        return accountId == account.accountId &&
-//                Objects.equals(owner, account.owner) &&
-//                currency == account.currency &&
-//                Objects.equals(balance, account.balance) &&
-//                Objects.equals(creationDate, account.creationDate) &&
-//                status == account.status;
-//    }
-//
-//    // Возвращает хэш-код
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(accountId, owner, currency, balance, creationDate, status);
-//    }
-//}
+    // DELETE
+    boolean deleteUser(int userID);
+    void removeAccountFromUserAccounts(int userID, int accountId);
+}
 
 
