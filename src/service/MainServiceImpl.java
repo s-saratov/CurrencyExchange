@@ -1,18 +1,49 @@
 package service;
 
 import model.*;
+import repository.UserRepository;
+import utils.validator.UserValidator;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainServiceImpl implements MainService {
+
+    private UserRepository userRepository;
 
     // ================= CREATE =================
 
     //-----------------------User—-----------------------------
     @Override
     public User registerUser(String name, String email, String password) {
+        try { // Валидация данных
+            UserValidator.isUsernameValid(name);
+            UserValidator.isEmailValid(email);
+            UserValidator.isPasswordValid(password);
+
+            // Проверка, существует ли email
+            if (userRepository.isEmailExists(email)) {
+                System.out.println("Пользователь с таким email уже существует.");
+                return null;
+            }
+            // Создание и сохранение нового пользователя
+            return userRepository.addUser()
+                    addUser(currentID.getAndIncrement(), name, email, password);
+        } catch (Exception e) {
+            System.out.println("Ошибка регистрации пользователя: " + e.getMessage());
+            return null;
+        }
+
+
+
+
+
+
+
+
         return null;
     }
 

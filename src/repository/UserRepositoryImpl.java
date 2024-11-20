@@ -8,26 +8,39 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация интерфейса UserRepository для управления пользователями.
+ * Включает операции добавления, удаления, поиска пользователей и управление их сессиями.
+ */
 public class UserRepositoryImpl implements UserRepository {
 
+    //карта пользователей
+    private final Map<Integer, User> users = new HashMap<>();
+    //генерация уникальных ID
+    private final AtomicInteger currentID = new AtomicInteger(1);
+    //Имя файла для логирования
+    private static final String LOG_FILE = "log.txt";
+
+    //Конструктор с предустановленными пользователями
+    public UserRepositoryImpl() {
+        User user1 = new User(currentID.getAndIncrement(), "Alex", "alexe@example.com", "password1", UserRole.USER);
+        User user2 = new User(currentID.getAndIncrement(), "Bogdan", "bogdan@example.com", "password2", UserRole.ADMIN);
+
+        users.put(user1.getUserID(), user1);
+        users.put(user2.getUserID(), user2);
+
+        writeTransactionLog("Инициализация пользователей: " + users);
+    }
     @Override
-    public User registerUser(String name, String email, String password, UserRole role) {
-        //проверка, существует ли пользователь с таким email
+    public User registerUser(int userId, String name, String email, String password, UserRole role) {
+        // Проверка существования email
         if (isEmailExists(email)) {
             System.err.println("Пользователь с email " + email + " уже существует.");
-            return null; //возвращаем null, если email уже занят
+            return null; // Возвращаем null, если email уже занят
         }
 
-        //генерируем уникальный ID
-        int userID = currentID.getAndIncrement();
-        //создаем нового пользователя
-        User newUser = new User(userID, name, email, password, role);
-        //добавляем пользователя в карту
-        users.put(userID, newUser);
-        writeTransactionLog("Зарегистрирован новый пользователь: " + newUser);
-
-        //возвращаем зарегистрированного пользователя
-        return newUser;
+        // Используем метод addUser для регистрации пользователя
+        return addUser(String name, String email, String password, UserRole role);
     }
 
     //карта для отслеживания, кто авторизован
@@ -59,23 +72,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 
 
-    //карта пользователей
-    private final Map<Integer, User> users = new HashMap<>();
-    //генерация уникальных ID
-    private final AtomicInteger currentID = new AtomicInteger(1);
-    //Имя файла для логирования
-    private static final String LOG_FILE = "log.txt";
 
-    //Конструктор с предустановленными пользователями
-    public UserRepositoryImpl() {
-        User user1 = new User(currentID.getAndIncrement(), "Alex", "alexe@example.com", "password1", UserRole.USER);
-        User user2 = new User(currentID.getAndIncrement(), "Bogdan", "bogdan@example.com", "password2", UserRole.ADMIN);
-
-        users.put(user1.getUserID(), user1);
-        users.put(user2.getUserID(), user2);
-
-        writeTransactionLog("Инициализация пользователей: " + users);
-    }
 
     @Override
     //реализация добавления аккаунта пользователю
@@ -86,9 +83,18 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
 
     public User addUser(int userId, String name, String email, String password) {
-        User newUser = new User(userId, name, email, password);
-        users.put(userId, newUser);
+        // Генерация уникального ID
+        int userID = currentID.getAndIncrement();
+
+        // Создание нового пользователя
+        User newUser = new User(userID, name, email, password);
+
+        // Добавление пользователя в карту
+        users.put(userID, newUser);
+
+        // Логирование
         writeTransactionLog("Добавлен пользователь: " + newUser);
+
         return newUser;
     }
 

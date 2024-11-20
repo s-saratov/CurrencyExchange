@@ -9,7 +9,7 @@ public interface UserRepository {
 
 
 
-    User registerUser(String name, String email, String password, UserRole role);
+    User registerUser(int userId, String name, String email, String password, UserRole role);
 
     boolean logoutUser(int userID);
     boolean loginUser(int userID, String password);
@@ -20,7 +20,7 @@ public interface UserRepository {
     void addAccountToUserAccounts(int userID, int accountId);
 
     //добавление нового пользователя
-    User addUser(int userID, String name, String email, String password);
+    User addUser(String name, String email, String password);
 
     //Получение списка пользователей по имени
     List<User> getUserByName(String name);
