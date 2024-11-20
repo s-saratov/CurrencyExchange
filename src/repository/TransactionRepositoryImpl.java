@@ -17,25 +17,29 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     List<Transaction> transactionList;
 
+
+    @Override
+    public void addTransactionToAccountTransactionsList(int accountID, Transaction transaction) {
+        // Получаем текущий список транзакций аккаунта
+        List<Transaction> accountTransactions = accountRepository.getAccountTransactionBuAccountId(accountID);
+
+        //проверяем, найден ли список транзакций, и создаём его, если он отсутствует
+        if (accountTransactions == null) {
+            accountTransactions = new ArrayList<>();
+            accountRepository.addAccountTransactionsList(accountID, accountTransactions);
+        }
+        accountTransactions.add(transaction);
+    }
+
     @Override
     public void feeDepositTransaction(BigDecimal feeAmount) {
 
         //находим сервисный счёт обменки
-        //TODO указать ID сервисного счёта обменки
         Account serviceAccount = accountRepository.getByID(777);
 
         //проверяем, был ли найден
         if (serviceAccount == null) {
             System.out.println("Account not found!");
-            return;
-        }
-
-        // Получаем текущий список транзакций аккаунта
-        List<Transaction> serviceAccountTransactions = accountRepository.getTransactions();
-
-        //проверяем, найден ли список транзакций, и создаём его, если он отсутствует
-        if (serviceAccountTransactions == null) {
-            System.out.println("Transaction list from service account not found!");
             return;
         }
 
@@ -49,9 +53,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         //добавляем нашу трансакцию в список трансакций
         transactionList.add(feeDepositTransaction);
 
-        //TODO
         // добавить трансакцию в список трансакций сервисного счёта обменки
-        accountRepository.getTransactions().add(feeDepositTransaction);
+        addTransactionToAccountTransactionsList(777, feeDepositTransaction);
     }
 
     @Override
@@ -85,9 +88,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         //добавляем нашу операцию в список трансакций
         transactionList.add(depositTransaction);
 
-        //TODO
         // добавить трансакцию в список трансакций счёта
-        accountRepository.getTransactions().add(depositTransaction);
+        addTransactionToAccountTransactionsList(accountID, depositTransaction);
     }
 
     @Override
@@ -127,9 +129,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         //добавляем нашу операцию в список трансакций
         transactionList.add(withdrawTransaction);
 
-        //TODO
-        // добавить трансакцию в список трансакций счёта
-        accountRepository.getTransactions().add(withdrawTransaction);
+        addTransactionToAccountTransactionsList(accountID, withdrawTransaction);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         /*
         // Проверяем, что курс валюты корректен и не равен нулю
         if (exchangeRate == null || exchangeRate.compareTo(BigDecimal.ZERO) == 0) {
-        throw new IllegalArgumentException("Invalid or missing exchange rate for currency: " + fromCurrencyCode);
+        throw new IllegalArgumentException("Invalid or missing exchange rate for currencyRepository: " + fromCurrencyCode);
         }
         */
 
@@ -212,9 +212,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         //сохраняем транзакцию в репозитории
         transactionList.add(exchangeTransaction);
 
-        //TODO
-        // добавить трансакцию в список трансакций счёта
-        accountRepository.getTransactions().add(exchangeTransaction);
+        addTransactionToAccountTransactionsList(targetAccountID, exchangeTransaction);
 
         return true; //операция выполнена успешно
     }
@@ -228,19 +226,6 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             }
         }
         return null;
-    }
-
-    @Override
-    public List<Transaction> getTransactionsByAccountId(int accountId) {
-
-        //проверяем, есть ли записи для данного аккаунта в карте accountOperations
-        if (accountRepository.getAccountTransactions().containsKey(accountId)) {
-            //если есть, возвращаем список операций по данному аккаунту
-            return accountRepository.getAccountTransactions().get(accountId);
-        } else {
-            //если записи нет, возвращаем пустой список
-            return List.of();
-        }
     }
 
     @Override
@@ -260,19 +245,23 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return transactionList;
     }
 
+    /*
     @Override
     public List<Transaction> getAllTransactionsByCurrency(String currentCode) {
 
         List<Transaction> transactionsListByCurrency = new ArrayList<>();
 
         for (Transaction transaction : transactionList){
+
             Account account = accountRepository.getByID(transaction.getAccountID());
+
             if (account.getCurrency().getCurrencyCode().equals(currentCode)) {
                 transactionsListByCurrency.add(transaction);
             }
         }
         return transactionsListByCurrency;
     }
+     */
 
 
     @Override

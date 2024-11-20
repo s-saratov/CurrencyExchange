@@ -1,9 +1,7 @@
 package repository;
 
-import model.Account;
+import model.*;
 import model.CustCurrency;
-import model.CustCurrency;
-import model.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,6 +27,12 @@ public interface AccountRepository {
 
     // Возвращает список счетов по валюте
     List<Account> getAccountsByCurrency(CustCurrency currency);
+
+    //получить список счетов по id аккаунта
+    List<Transaction> getAccountTransactionBuAccountId(int accountID);
+
+    //добавить список трансакций по счёт
+    void addAccountTransactionsList(int accountID, List<Transaction> transactions);
 
     // DELETE
 

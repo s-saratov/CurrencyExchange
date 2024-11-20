@@ -14,6 +14,9 @@ public interface TransactionRepository {
     //зачисление комиссии на сервисный счёт компании
     void feeDepositTransaction(BigDecimal amount);
 
+    //добавить трансакцию в список трансакций счёта
+    void addTransactionToAccountTransactionsList(int accountID, Transaction transaction);
+
     //зачисление средств на счёт
     void depositTransaction(int userID, int accountID, TransactionType transactionType, BigDecimal amount);
 
@@ -30,8 +33,6 @@ public interface TransactionRepository {
     //найти операцию по id
     Transaction findTransaction(int id);
 
-    //посмотреть список операций по счёту
-    List<Transaction> getTransactionsByAccountId(int accountId);
 
     //посмотреть список операций по юзеру
     List<Transaction> getTransactionsByUserId(int userId);
@@ -39,8 +40,10 @@ public interface TransactionRepository {
     //посмотреть список всех операций
     List<Transaction> getAllTransactions(String currentCode);
 
+    /*
     //посмотреть список всех операций по валюте
     List<Transaction> getAllTransactionsByCurrency(String currentCode);
+     */
 
     //посмотреть список операций по дате
     List<Transaction> getTransactionsByDate(LocalDate date);

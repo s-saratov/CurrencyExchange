@@ -9,6 +9,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class UserRepositoryImpl implements UserRepository {
+    //генерация уникальных ID
+    private final AtomicInteger currentID = new AtomicInteger(1);
+    //карта пользователей
+    private final Map<Integer, User> users = new HashMap<>();
+    //Имя файла для логирования
+    private static final String LOG_FILE = "log.txt";
+
+    //Конструктор с предустановленными пользователями
+    public UserRepositoryImpl() {
+        User user1 = new User(currentID.getAndIncrement(), "Alex", "alexe@example.com", "password1", UserRole.USER);
+        User admin = new User(currentID.getAndIncrement(), "Bogdan", "bogdan@example.com", "password2", UserRole.ADMIN);
+
+        users.put(user1.getUserID(), user1);
+        users.put(admin.getUserID(), admin);
+
+        writeTransactionLog("Инициализация пользователей: " + users);
+    }
+
+    public Map<Integer, User> getUsers() {
+        return users;
+    }
 
     @Override
     public User registerUser(String name, String email, String password, UserRole role) {
@@ -55,26 +76,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
         System.err.println("Пользователь с ID " + userId + "не авторизован.");
         return false;
-    }
-
-
-
-    //карта пользователей
-    private final Map<Integer, User> users = new HashMap<>();
-    //генерация уникальных ID
-    private final AtomicInteger currentID = new AtomicInteger(1);
-    //Имя файла для логирования
-    private static final String LOG_FILE = "log.txt";
-
-    //Конструктор с предустановленными пользователями
-    public UserRepositoryImpl() {
-        User user1 = new User(currentID.getAndIncrement(), "Alex", "alexe@example.com", "password1", UserRole.USER);
-        User user2 = new User(currentID.getAndIncrement(), "Bogdan", "bogdan@example.com", "password2", UserRole.ADMIN);
-
-        users.put(user1.getUserID(), user1);
-        users.put(user2.getUserID(), user2);
-
-        writeTransactionLog("Инициализация пользователей: " + users);
     }
 
     @Override
