@@ -1,9 +1,11 @@
 package repository;
 
-import model.*;
-import model.CustCurrency;
+import model.Account;
+import model.AccountStatus;
+import model.Currency;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,55 +13,48 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AccountRepositoryImpl implements AccountRepository {
+
     // Поля
-    private final AtomicInteger currentID = new AtomicInteger(1); // объект, отвечающий за генерацию уникальных ID
-    Map<Integer, List<Account>> accounts;   // карта счетов
-
-    //accountId
-    private Map<Integer, List<Transaction>> accountTransactions; //карта трансакций счёта
-
-    UserRepository userRepository;
-    CustCurrencyRepository currencyRepository;
+    Map<Integer, List<Account>> accounts;                     // карта счетов
+    AtomicInteger currentID = new AtomicInteger(1); // объект, отвечающий за генерацию уникальных ID
 
     // Конструктор
     public AccountRepositoryImpl() {
         // Создаём карту счетов
         this.accounts = new HashMap<>();
-
-        User serviceUser = userRepository.getUserByEmail("bogdan@example.com");
-        CustCurrency baseCurrency = currencyRepository.getCurrencyByCode("EUR");
-
-        Account serviceAccount = new Account(
-                777,
-                serviceUser,
-                baseCurrency,
-                BigDecimal.ZERO,
-                AccountStatus.SYSTEM
-        );
-        //добавляем этот счёт в карту счётов
-        List<Account> serviceAccounts = new ArrayList<>();
-        serviceAccounts.add(serviceAccount.getAccountID(), serviceAccount);
-        accounts.put(serviceAccount.getAccountID(), serviceAccounts);
+        this.addAccount(2, LocalDate.parse("2024-02-15"), "EUR", BigDecimal.valueOf(1500.00), AccountStatus.ACTIVE);
+        this.addAccount(2, LocalDate.parse("2024-05-07"), "USD", BigDecimal.valueOf(2000.00), AccountStatus.ACTIVE);
     }
 
     // Методы
 
-    // CREATE
+    // === CREATE ===
 
     // Добавляет счёт в общий список
     @Override
-    public void addAccount(User owner, CustCurrency currency, BigDecimal initialBalance) {
-        Account newAccount = new Account(
-                this.currentID.getAndIncrement(),
-                owner,
-                currency,
-                initialBalance,
-                AccountStatus.ACTIVE
-        );
-        accounts.computeIfAbsent(owner.getUserID(), k -> new ArrayList<>()).add(newAccount);
+    public Account addAccount(int userID, String currencyCode, BigDecimal initialBalance) {
+        Account newAccount = new Account(this.currentID.getAndIncrement(), currencyCode, initialBalance);
+        // Получаем список счетов для данного userID или создаём новый, если списка нет
+        accounts.computeIfAbsent(userID, k -> new ArrayList<>()).add(newAccount);
+        return newAccount;
         // TODO: дописать проверки
+
     }
 
+    // Добавляет счёт в общий список (c указанием даты создания и статуса счёта)
+    @Override
+    public Account addAccount(int userID,
+                              LocalDate creationDate,
+                              String currencyCode,
+                              BigDecimal initialBalance,
+                              AccountStatus status) {
+        Account newAccount = new Account(this.currentID.getAndIncrement(), creationDate, currencyCode, initialBalance, status);
+        // Получаем список счетов для данного userID или создаём новый, если списка нет
+        accounts.computeIfAbsent(userID, k -> new ArrayList<>()).add(newAccount);
+        return newAccount;
+        // TODO: написать проверки
+
+    }
 
     // READ
 
@@ -67,7 +62,6 @@ public class AccountRepositoryImpl implements AccountRepository {
     public Map<Integer, List<Account>> getAccounts() {
         return accounts;
     }
-
 
     // Возвращает счёт по ID
     @Override
@@ -78,6 +72,7 @@ public class AccountRepositoryImpl implements AccountRepository {
             }
         }
         return null;
+        // TODO: написать проверки
     }
 
     // Возвращает список счетов по владельцу
@@ -88,42 +83,10 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     // Возвращает список счетов по валюте
     @Override
-    public List<Account> getAccountsByCurrency(CustCurrency currency) {
-        List<Account> result = new ArrayList<>();
-        for (List<Account> accounts : accounts.values()) {
-            for (Account account : accounts) {
-                if (account.getCurrency().equals(currency)) result.add(account);
-            }
-        }
-        return result;
+    public List<Account> getAccountsByCurrency(Currency currency) {
+        return List.of();
+        // TODO: написать метод
     }
-
-    @Override
-    public List<Transaction> getAccountTransactionBuAccountId(int accountID) {
-        //проверяем, существует ли счёт с таким accountID в карте
-        if (accountTransactions.containsKey(accountID)) {
-            // Возвращаем список транзакций для данного accountID
-            return accountTransactions.get(accountID);
-        } else {
-            //если счёт не найден, возвращаем пустой список
-            System.out.println("No transactions found for account ID: " + accountID);
-            return List.of();
-
-        }
-    }
-
-    @Override
-    public void addAccountTransactionsList(int accountID, List<Transaction> transactions) {
-        // Проверяем, существует ли список транзакций для данного accountID
-        List<Transaction> transactionsList = accountTransactions.get(accountID);
-
-        // Если список отсутствует, создаем его
-        if (transactionsList == null) {
-            transactionsList = new ArrayList<>();
-            accountTransactions.put(accountID, transactionsList); // Добавляем новый список в карту
-        }
-    }
-
 
     // Возвращает строковое представление экземпляра класса
     @Override
@@ -134,7 +97,7 @@ public class AccountRepositoryImpl implements AccountRepository {
                 '}';
     }
 
-    // DELETE
+    // === DELETE ===
 
     // Удаляет счёт
     @Override
@@ -146,4 +109,5 @@ public class AccountRepositoryImpl implements AccountRepository {
         }
         // TODO: добавить проверки
     }
+
 }

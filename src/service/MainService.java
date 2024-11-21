@@ -1,105 +1,76 @@
 package service;
 
-import model.*;
+import model.Account;
+import model.User;
+import model.UserRole;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
-public interface MainService  {
+public interface MainService {
 
-    // ================= CREATE =================
+    // === CREATE ===
 
-    //-----------------------User—-----------------------------
-    // Регистрирует пользователя на основании переданных адреса электронной почты, пароля и имени, возвращает экземпляр класса
-    User registerUser(String name, String email, String password);
+    // Добавляет новую валюту
+    public boolean addCurrency(String currencyCode, String currencyName, double rate);
 
-    //-----------------------Account----------------------------
-    // Добавляет новый счёт в репозиторий (список)
-    // Может потребоваться валидация на наличие счета в такой валюте для пользователя.
-    Account addAccount(User owner, CustCurrency custCurrency, BigDecimal initialBalance);
+    // Добавляет счёт банковский счёт для пользователя по ID
+    public Account addAccount(int userID, String currencyCode, BigDecimal initialBalance);
 
-    //----------------------Currency-----------------------------
-    // Добавляет валюту (доступен только администратору)
-    boolean addCurrency(String currencyCode, String currencyName);
+    // === READ ===
 
-    //----------------------CurrencyRate---------------------------
-    // Устанавливает курс валюты (доступен администратору)
-    boolean setExchangeRate(String currencyCode, BigDecimal rate);
-
-    //---------------------Transaction—----------------------------
-    //Осуществляет поступление указанной суммы на счёт по ID, возвращает статус успеха операции
-    boolean depositMoney(int accountID, BigDecimal  amount);
-
-    //Осуществляет снятие указанной суммы со счёта по ID, возвращает статус успеха операции
-    boolean withdrawMoney(int id, BigDecimal amount);
-
-    //Осуществляет перевод указанной суммы со счёта-донора на счёт-реципиент (по ID), возвращает статус успеха операции
-    boolean transferMoney(double amount, int sourceAccountID, int targetAccountID);
-
-    //Осуществляет пересчет из любой валюты в евро, возвращает сумму в BigDecimal
-    BigDecimal toEUR(CustCurrency custCurrency, BigDecimal amount);
-
-    /*
-    //Вычисляет комиссию по операции в формате BigDecimal
-    BigDecimal calculateFee(BigDecimal amount, double feeRate);
-    */
-
-    // Показать историю транзакций по ID счета
-    List<Transaction> getTransactionHistoryByAccountID(int accountID);
-
-    // Показать историю транзакций по ID пользователя
-    List<Transaction> getTransactionHistoryByUserID(int userID);
-
-
-    // ======================= READ ============================
-    // -----------------------User—-----------------------------
-    // Возвращает пользователя по ID
-    User getUserByID(int userID);
-
-    // Возвращает карту всех пользователя
-    List<User> getAllUsers();
+    // Возвращает объект пользователя по ID
+    public User getUserByID(int userID);
 
     // Возвращает активного пользователя
-    User getActiveUser(int userID);
+    public User getActiveUser();
 
-    // Возвращает карту пользователей по ролям
-    public Map<Integer, User> getUsersByRole(UserRole... roles);
+    // Возвращает список пользователей по заданным ролям
+    public List<User> getUsersByRole(UserRole... roles);
 
-    //Осуществляет вход пользователя в систему и возвращает статус успеха операции
-    boolean loginUser(String email, String password);
+    // Возвращает объект счёта по ID
+    public Account getAccountByID(int accountID);
+
+    // Возвращает текущий курс валюты по коду
+    public double getCurrencyRate(String currencyCode);
+
+    // Возвращает boolean, корректен ли код валюты
+    public boolean isCurrencyCodeCorrect(String currencyCode);
+
+    // Возвращает код валюты по ID счёта
+    public String getCurrencyCode(int accountID);
+
+    // Выводит в консоль строковое представление курсов валют
+    public void printCurrencyRates();
+
+    // Выводит в консоль строковое представление счетов пользователя
+    public void printUserAccounts();
+
+    // Выводит в консоль строковое представление счетов пользователя (за исключением id)
+    public void printUserAccounts(int id);
+
+    // Выводит в консоль строковое представление доступных в системе валют
+    public void printCurrencies();
+
+
+    // === UPDATE ===
+
+    // Осуществляет перевод суммы денег с одного счёта (по ID) на другой (по ID)
+    public void transferMoney(int sourceAccountID, int targetAccountID, BigDecimal amount);
+
+    // Осуществляет внесение денег на счёт
+    public void depositTransfer(int sourceAccountID, BigDecimal amount);
+
+    // Осуществляет снятие денег на счёт
+    public void withdrawMoney(int sourceAccountID, BigDecimal amount);
+
+    // Регистрирует пользователя на основании переданных имени, адреса электронной почты и пароля, возвращает экземпляр класса
+    public User registerUser(String name, String email, String password);
+
+    // Осуществляет вход пользователя в систему и возвращает статус успеха операции
+    public boolean loginUser(String email, String password);
 
     // Осуществляет выход пользователя из системы
-    void logoutUser();
-
-    //—-----------------------Account----------------------------
-    //Возвращает список всех счетов компании в формате карты (для администратора)
-    Map<Integer, User> getAllAccounts();
-
-    //Возвращает карту счетов компании, отсортированную по пользователям
-    Map<Integer, User> getAllAccountsSortedByOwner();
-
-    //Возвращает карту счетов одного пользователя по ID пользователя
-    Map<Integer, Account> getUserAccountsByUserID(int userID);
-
-    //  Найти счёт по его ID
-    Account getAccountByID(int accountID);
-
-    //—-----------------------CurrencyRate—----------------------------
-    // Посмотреть текущие курсы валют
-    Map<CustCurrency, Double> getCurrencyRates(CustCurrency custCurrency);
-
-    //Закрыть счёт (изменить статус на closed) по ID
-    boolean closeAccount(int accountID);
-
-    // ======================DELETE=================================
-    // Удаляет юзера по id
-    // Нужно добавить проверку, что пользователь удаляется вместе со всеми его счетами.
-    boolean deleteUserByID(int userID);
-
-    // Удаляет счёт по id
-    // Следует учитывать, что перед удалением нужно проверить отсутствие средств на счете.
-    Account deleteAccountByID(int accountID);
-
+    public void logout();
 
 }

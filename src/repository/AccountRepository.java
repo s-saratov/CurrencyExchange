@@ -1,20 +1,30 @@
 package repository;
 
-import model.*;
-import model.CustCurrency;
+import model.Account;
+import model.AccountStatus;
+import model.Currency;
+import model.User;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public interface AccountRepository {
 
-    // CREATE
+    // === CREATE ===
 
-    // Добавляет счёт в общий список
-    void addAccount(User owner, CustCurrency currency, BigDecimal initialBalance);
+    // Добавляет счёт в общую карту
+    Account addAccount(int userID, String currencyCode, BigDecimal initialBalance);
 
-    // READ
+    // Добавляет счёт в общий список (c указанием даты создания и статуса счёта)
+    Account addAccount(int userID,
+                       LocalDate creationDate,
+                       String currencyCode,
+                       BigDecimal initialBalance,
+                       AccountStatus status);
+
+    // === READ ===
 
     // Возвращает карту всех счетов
     public Map<Integer, List<Account>> getAccounts();
@@ -26,13 +36,7 @@ public interface AccountRepository {
     List<Account> getAccountsByOwner(int ownerID);
 
     // Возвращает список счетов по валюте
-    List<Account> getAccountsByCurrency(CustCurrency currency);
-
-    //получить список счетов по id аккаунта
-    List<Transaction> getAccountTransactionBuAccountId(int accountID);
-
-    //добавить список трансакций по счёт
-    void addAccountTransactionsList(int accountID, List<Transaction> transactions);
+    List<Account> getAccountsByCurrency(Currency currency);
 
     // DELETE
 

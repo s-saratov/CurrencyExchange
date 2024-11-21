@@ -7,41 +7,45 @@ import java.util.List;
 
 public interface UserRepository {
 
+    // === CREATE ===
 
+    // Добавляет счёт в список пользователя TODO: нужен ли этот метод???
+    // void addAccountToUserAccounts(int userId, int accountId);
 
-    User registerUser(String name, String email, String password, UserRole role);
+    // Добавляет пользователя в карту пользователей (без указания роли)
+    User addUser(String name, String email, String password);
 
-    boolean logoutUser(int userID);
-    boolean loginUser(int userID, String password);
+    // Добавляет пользователя в карту пользователей (с указанием роли)
+    User addUser(String name, String email, String password, UserRole role);
 
+    // === READ ===
 
-
-    //добавление аккаунта пользователю
-    void addAccountToUserAccounts(int userID, int accountId);
-
-    //добавление нового пользователя
-    User addUser(int userID, String name, String email, String password);
-
-    //Получение списка пользователей по имени
+    // Проверяет, зарегистрирован ли пользователь с указанным именем
     List<User> getUserByName(String name);
 
-    //Проверка существования email
+    // Проверяет, зарегистрирован ли пользователь с заданным адресом электронной почты
     boolean isEmailExists(String email);
 
-    //Получение списка пользователей по ролям
+    // Возвращает список пользователей по заданным ролям
+
     List<User> getUsersByRole(UserRole... roles);
 
-    //Получение пользователя по email
+    // Возвращает объект пользователя по адресу электронной почты
     User getUserByEmail(String email);
 
-    //Получение пользователя по ID
-    User getUserByID(int userID);
+    // Возвращает объект пользователя по ID
+    User getUserByID(int userId);
 
-    //Удаление пользователя
-    boolean deleteUser(int userID);
+    // === UPDATE ===
 
-    //Удаление аккаунта у пользователя
-    void removeAccountFromUserAccounts(int userID, int accountId);
+
+
+    // === DELETE ===
+
+    // Удаляет счёт пользователя из карты
+    boolean deleteUser(int userId);
+
+    // Добавляет счёт в список пользователя TODO: нужен ли этот метод???
+    // void removeAccountFromUserAccounts(int userId, int accountId);
+
 }
-
-

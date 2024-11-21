@@ -2,12 +2,7 @@ package model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import model.CustCurrency;
 
-/**
- * @author olgakharina
- * @date 15.11.24
- */
 public class Account {
 
     // Поля
@@ -18,11 +13,8 @@ public class Account {
     // Дата создания счета
     private final LocalDate creationDate;
 
-    // Владелец счета
-    private User owner;
-
-    // Валюта счета
-    private CustCurrency currency;
+    // Код валюты счета
+    private String currencyCode;
 
     // Баланс счета
     private BigDecimal balance;
@@ -30,55 +22,29 @@ public class Account {
     // Статус счета
     private AccountStatus status;
 
-    // Стандартный конструктор
-    public Account(int accountID, LocalDate creationDate, User owner, CustCurrency currency) {
+    // Конструкторы
+
+    // Стандартный (создаёт счёт текущей датой со статусом ACTIVE)
+    public Account(int accountID, String currencyCode, BigDecimal balance) {
         this.accountID = accountID;
-        this.creationDate = creationDate;
-        this.owner = owner;
-        this.currency = currency;
+        this.creationDate = LocalDate.now();
+        this.currencyCode = currencyCode; // TODO: сделать вставку кода через сеттер для проверки
+        this.balance = balance;
+        this.status = AccountStatus.ACTIVE;
     }
 
-    // Конструктор с параметром статуса счёта
-    public Account(int accountID, User owner, CustCurrency currency, BigDecimal balance, AccountStatus status) {
+    // Полный (с указанием даты открытия и статуса счёта)
+    public Account(int accountID, LocalDate creationDate, String currencyCode, BigDecimal balance, AccountStatus status) {
         this.accountID = accountID;
-        // Устанавливается текущая дата
-        this.creationDate = LocalDate.now();
-        this.owner = owner;
-        this.currency = currency;
+        this.creationDate = creationDate;
+        this.currencyCode = currencyCode;
         this.balance = balance;
-        /* Если статус не был задан при создании пользователя - по умолчанию "ACTIVE" */
-        this.status = status != null ? status : AccountStatus.ACTIVE;
+        this.status = AccountStatus.ACTIVE;
     }
 
     // Геттеры и сеттеры
 
-    public User getOwner() {
-        return owner;
-    }
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public CustCurrency getCurrency() {
-        return currency;
-    }
-    public void setCurrency(CustCurrency currency) {
-        this.currency = currency;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public AccountStatus getStatus() {
-        return status;
-    }
-    public void setStatus(AccountStatus status) {
-        this.status = status;
-    }
+    // TODO: добавить сеттеры по необходимости
 
     public int getAccountID() {
         return accountID;
@@ -88,20 +54,35 @@ public class Account {
         return creationDate;
     }
 
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     // Методы
 
     // Возвращает строковое представление экземпляра класса
+
+
     @Override
     public String toString() {
-        return "Account {" +
-
-                "id=" + accountID +
-                ", owner=" + owner.getName() + // Предполагается, что в User есть метод getCurrencyName()
-                ", currency=" + currency +
-                ", balance=" + balance +
+        return "Account{" +
+                "accountID=" + accountID +
                 ", creationDate=" + creationDate +
+                ", currencyCode='" + currencyCode + '\'' +
+                ", balance=" + balance +
                 ", status=" + status +
                 '}';
     }
-
 }
